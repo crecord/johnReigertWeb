@@ -92,7 +92,7 @@
 
 				var loader = new THREE.PLYLoader();
 				loader.load( 'john.ply', function ( geometry ) {
-
+					console.log("loadingModel"); 
 					geometry.computeFaceNormals();
 
 					var material = new THREE.MeshStandardMaterial( { color: 0x0055ff } );
@@ -139,7 +139,11 @@
 			cameraRig.add( cameraFollow );
 			scene.add(cameraRig); 
 			
+			// Lights
 
+			scene.add( new THREE.HemisphereLight( 0x443333, 0x111122 ) );
+
+			
             renderer = new THREE.WebGLRenderer({
                 antialias: true,
                 alpha: true
@@ -155,8 +159,6 @@
 
 			parentTransform = new THREE.Object3D();
 			console.log(myArr); 
-			//console.log( myArr[0].scribbles[0]);
-			//console.log( myArr[0].scribbles[0]);
             for (var j = 1; j < myArr.scribbles.length; j++) {
                 var points = [];
                 var rawArrayofPoints = myArr.scribbles[j].line;
