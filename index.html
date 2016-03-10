@@ -138,6 +138,8 @@
             material = new THREE.MeshDepthMaterial( { overdraw: 0.5 } );
 
 			parentTransform = new THREE.Object3D();
+			console.log(myArr); 
+			console.log( myArr.line.length);
             for (var j = 0; j < myArr.line.length; j++) {
                 var points = [];
                 var rawArrayofPoints = myArr.line[j].points;
