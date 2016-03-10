@@ -91,8 +91,9 @@
 				// PLY file
 
 				var loader = new THREE.PLYLoader();
-				loader.load( 'john.ply', function ( geometry ) {
-					console.log("loadingModel"); 
+				console.log("loadingModel1"); 
+				loader.load( 'dolphins.ply', function ( geometry ) {
+					console.log("loadingModel2"); 
 					geometry.computeFaceNormals();
 
 					var material = new THREE.MeshStandardMaterial( { color: 0x0055ff } );
