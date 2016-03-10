@@ -55,6 +55,7 @@
 
     <script src="Detector.js"></script>
     <script src="stats.min.js"></script>
+    <script src="PLYLoader.js"></script>
     <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
     <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 
@@ -87,7 +88,22 @@
         arrayOfAllLines = [];
 
         function init(myArr) {
+				// PLY file
 
+				var loader = new THREE.PLYLoader();
+				loader.load( 'john.ply', function ( geometry ) {
+
+					geometry.computeFaceNormals();
+
+					var material = new THREE.MeshStandardMaterial( { color: 0x0055ff } );
+					var mesh = new THREE.Mesh( geometry, material );
+
+					mesh.castShadow = true;
+					mesh.receiveShadow = true;
+
+					scene.add( mesh );
+
+				} );
 			for (var i = 0; i<3; i++){
 				var string =  "myAudio" + (i+1);
 				var audio = document.getElementById(string);
