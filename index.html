@@ -140,9 +140,9 @@
 			parentTransform = new THREE.Object3D();
 			console.log(myArr); 
 			console.log( myArr[0].scribbles[0]);
-            for (var j = 0; j < myArr.scribbles.length; j++) {
+            for (var j = 1; j < myArr[0].scribbles.length; j++) {
                 var points = [];
-                var rawArrayofPoints = myArr.scribbles[j].points;
+                var rawArrayofPoints = myArr[0].scribbles[j].points;
                 for (i = 0; i < rawArrayofPoints.length; i += 3) {
                     var threeVector = new THREE.Vector3(rawArrayofPoints[i], rawArrayofPoints[i + 1], rawArrayofPoints[i + 2])
                     points.push(threeVector);
