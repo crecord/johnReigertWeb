@@ -60,7 +60,7 @@
 
     <script>
         var xmlhttp = new XMLHttpRequest();
-        var url = "allTheLines.json";
+        var url = "johnLines.json";
 
         xmlhttp.onreadystatechange = function() {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -140,9 +140,9 @@
 			parentTransform = new THREE.Object3D();
 			console.log(myArr); 
 			console.log( myArr.line.length);
-            for (var j = 0; j < myArr.line.length; j++) {
+            for (var j = 0; j < myArr.scribbles.length; j++) {
                 var points = [];
-                var rawArrayofPoints = myArr.line[j].points;
+                var rawArrayofPoints = myArr.scribbles[j].points;
                 for (i = 0; i < rawArrayofPoints.length; i += 3) {
                     var threeVector = new THREE.Vector3(rawArrayofPoints[i], rawArrayofPoints[i + 1], rawArrayofPoints[i + 2])
                     points.push(threeVector);
