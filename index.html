@@ -97,7 +97,8 @@
 					var material = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x111111, shininess: 200, vertexColors: THREE.VertexColors} );
 					//var material = new THREE.MeshStandardMaterial( {color: 0x0055ff, specular: 0x111111, shininess: 200 } );
 					var mesh = new THREE.Mesh( geometry, material );
-					mesh.scale.multiplyScalar( 1.5 );
+					mesh.scale.multiplyScalar( 5 );
+					mesh.position.y = 1.5708;
 					scene.add( mesh );
 
 				} );
