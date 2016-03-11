@@ -67,11 +67,14 @@
 				document.body.appendChild( container );
 
 				camera = new THREE.PerspectiveCamera( 35, window.innerWidth / window.innerHeight, 1, 15 );
-				camera.position.set( 3, 0.15, 5);
+				camera.position.set( 3, 0.15, 3 );
 
 				cameraTarget = new THREE.Vector3( 0, -0.25, 0 );
 
 				scene = new THREE.Scene();
+				scene.fog = new THREE.Fog( 0x72645b, 2, 15 );
+
+
 
 
 				// PLY file
@@ -133,7 +136,6 @@ renderer = new THREE.WebGLRenderer({
 				requestAnimationFrame( animate );
 
 				render();
-				stats.update();
 
 			}
 
