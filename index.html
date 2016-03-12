@@ -36,7 +36,6 @@
 </head>
 
 <body>
-
     <audio style= "display:none;" id="myAudio1" src = "Sand.wav" controls loop>
     <a href = "Sand.wav">DoYou.ogg</a>
   </audio>
@@ -52,7 +51,8 @@
     <script src="three.min.js"></script>
 
     <script src="hilbert3D.js"></script>
-
+    <script src="Tween.js"></script>
+    <script src="RequestAnimationFrame.js"></script>
     <script src="Detector.js"></script>
     <script src="stats.min.js"></script>
     <script src="PLYLoader.js"></script>
@@ -92,7 +92,6 @@
 
 				var loader = new THREE.PLYLoader();
 				loader.load( 'john3.ply', function ( geometry ) {
-
 					geometry.computeFaceNormals();
 					var material = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x111111, shininess: 200, vertexColors: THREE.VertexColors} );
 					//var material = new THREE.MeshStandardMaterial( {color: 0x0055ff, specular: 0x111111, shininess: 200 } );
@@ -102,8 +101,7 @@
 					mesh.rotation.x = -1.5;
 					mesh.rotation.z = -0.5
 					scene.add( mesh );
-
-				} );
+				});
 
 				// Lights
 
@@ -386,8 +384,9 @@ function removeEntity(object) {
         				count = 0; 
         				currentlyBeingPlayed = undefined;
         				clearInterval(stopSetInterval); 
-        			}
-        }
+        				// this is the moment to animate the camera
+        				
+        				
         
         function onDocumentMouseUp(event) {
         console.log("clickzz");
@@ -425,26 +424,19 @@ function removeEntity(object) {
         			currentAudio.play();
         			stopSetInterval = setInterval(function(){ moveColor()}, 10);
         		 }
-        		 /*
-        		for (var i=0; i < currentIntersected.geometry.colors.length; i++){
         		
-        			currentIntersected.geometry.colors[i] = new THREE.Color(0xffffff, .3);
-                    currentIntersected.geometry.colors[i].setRGB(255,0,0);
-                    currentIntersected.geometry.colorsNeedUpdate = true; 
-        		}
-        		*/ 
-        		//console.log(currentIntersected.geometry.colors);
-        		//console.log(currentIntersected.geometry.colorsNeedUpdate);
         	}
         }
         
 
         //
 
-        function animate() {
+        function animate(time) {
 
             requestAnimationFrame(animate);
             render();
+            
+            TWEEN.update( time );
 
         }
 
@@ -521,26 +513,6 @@ function removeEntity(object) {
 		}
 		
 		
-		function toScreenPosition(obj, camera)
-{
-    var vector = new THREE.Vector3();
-
-    var widthHalf = 0.5*renderer.context.canvas.width;
-    var heightHalf = 0.5*renderer.context.canvas.height;
-
-    obj.updateMatrixWorld();
-    vector.setFromMatrixPosition(obj.matrixWorld);
-    vector.project(camera);
-
-    vector.x = ( vector.x * widthHalf ) + widthHalf;
-    vector.y = - ( vector.y * heightHalf ) + heightHalf;
-
-    return { 
-        x: vector.x,
-        y: vector.y
-    };
-
-};
     </script>
 </body>
 
