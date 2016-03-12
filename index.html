@@ -463,20 +463,16 @@ function removeEntity(object) {
             var nearestIndex; 
             
             //iterate through all the lines.
-        
-        console.log("hi1");
-        console.log(parentTransform.children.length);
-        console.log(parentTransform.children);
-        console.log(parentTransform);
-        console.log(parentTransform.length);
+        if(parentTransform.children.length > 0){
             for (var i =0; i< parentTransform.children.length; i++ ){
             	// now each point in the line. 
             	console.log("hi");
-            	console.log(parentTransform.children[i].children.length);
-            	for(var y=0; y < parentTransform.children[i].children.length; y++){
-            		console.log(parentTransform.children[i].children[y]); 
+            	console.log(parentTransform.children[i].geometry.vertices);
+            	for(var y=0; y < parentTransform.children[i].geometry.vertices; y++){
+            		console.log(parentTransform.children[i].geometry.vertices[y]); 
             	}
             } 
+        }
 
             
             
