@@ -454,8 +454,11 @@ function removeEntity(object) {
            camera.position.y += (-mouseY + 200 - camera.position.y) * .05;
 
             camera.lookAt(scene.position);
-
-
+            
+            
+            
+/// begin selection
+/*
             raycaster.setFromCamera(mouse, camera);
 
             var intersects = raycaster.intersectObjects( parentTransform.children , true);
@@ -484,10 +487,9 @@ function removeEntity(object) {
 					}
 
 					currentIntersected = undefined;
-
-					//sphereInter.visible = false;
-
 				}
+		*/ 		
+		//end selection 
             renderer.setClearColor(0xffffff, 1);
             renderer.render(scene, activeCamera);
 
