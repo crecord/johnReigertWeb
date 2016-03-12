@@ -97,8 +97,10 @@
 					var material = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x111111, shininess: 200, vertexColors: THREE.VertexColors} );
 					//var material = new THREE.MeshStandardMaterial( {color: 0x0055ff, specular: 0x111111, shininess: 200 } );
 					var mesh = new THREE.Mesh( geometry, material );
-					mesh.scale.multiplyScalar( 4 );
-					mesh.position.y = 3.14159;
+					mesh.scale.multiplyScalar( 4.38 );
+					mesh.position.y = 3.5;
+					mesh.rotation.x = -1.5;
+					mesh.rotation.z = -0.5
 					scene.add( mesh );
 
 				} );
@@ -144,7 +146,7 @@
 			
 			// Lights
 
-			scene.add( new THREE.HemisphereLight( 0x443333, 0x111122 ) );
+			scene.add( new THREE.HemisphereLight( 0xffffff, 0xffffff ) );
 
 			
             renderer = new THREE.WebGLRenderer({
@@ -403,9 +405,9 @@ function removeEntity(object) {
         			console.log(currentlyBeingPlayed.scale);
         			
         			scaledCurrentlyBeingPlayed = currentlyBeingPlayed.clone();        			
-        			scaledCurrentlyBeingPlayed.scale.x = 10; 
-        			scaledCurrentlyBeingPlayed.scale.y = 10; 
-        			scaledCurrentlyBeingPlayed.scale.z = 10; 
+        			scaledCurrentlyBeingPlayed.scale.x = 4; 
+        			scaledCurrentlyBeingPlayed.scale.y = 4; 
+        			scaledCurrentlyBeingPlayed.scale.z = 4; 
         			
         			scaledCurrentlyBeingPlayed.rotation.x = -1.5;
 					scaledCurrentlyBeingPlayed.rotation.z = -.5;
