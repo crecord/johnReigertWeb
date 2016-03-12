@@ -466,11 +466,15 @@ function removeEntity(object) {
         if(parentTransform.children.length > 0){
             for (var i =0; i< parentTransform.children.length; i++ ){
             	// now each point in the line. 
-            	console.log("hi");
-            	console.log(parentTransform.children[i].geometry.vertices.length);
             	for(var y=0; y < parentTransform.children[i].geometry.vertices.length; y++){
-            		console.log("yo yo");
-            		console.log(parentTransform.children[i].geometry.vertices[y]); 
+            		var vertex= parentTransform.children[i].geometry.vertices[y]; 
+            		var projector = new THREE.Projector();
+            		var v = projector.projectVector(vertex, camera);
+            		var percX = (v.x + 1) / 2;
+            		var percY = (-v.y + 1) / 2;
+            		var left = percX * window.innerWidth;
+            		var top = percY * window.innerHeight;
+					var 2Dpoint = THREE.Vector2(left, top);
             	}
             } 
         }
