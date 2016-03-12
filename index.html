@@ -467,8 +467,9 @@ function removeEntity(object) {
             for (var i =0; i< parentTransform.children.length; i++ ){
             	// now each point in the line. 
             	console.log("hi");
-            	console.log(parentTransform.children[i].geometry.vertices);
-            	for(var y=0; y < parentTransform.children[i].geometry.vertices; y++){
+            	console.log(parentTransform.children[i].geometry.vertices.length);
+            	for(var y=0; y < parentTransform.children[i].geometry.vertices.length; y++){
+            		console.log("yo yo");
             		console.log(parentTransform.children[i].geometry.vertices[y]); 
             	}
             } 
