@@ -468,13 +468,10 @@ function removeEntity(object) {
             	// now each point in the line. 
             	for(var y=0; y < parentTransform.children[i].geometry.vertices.length; y++){
             		var vertex= parentTransform.children[i].geometry.vertices[y]; 
-            		var projector = new THREE.Projector();
-            		var v = projector.projectVector(vertex, camera);
-            		var percX = (v.x + 1) / 2;
-            		var percY = (-v.y + 1) / 2;
-            		var left = percX * window.innerWidth;
-            		var top = percY * window.innerHeight;
-					var twoDpoint = THREE.Vector2(left, top);
+            		var obj =new THREE.Object3D();
+            		obj.position = vertex;
+            		var screenPos = toScreenPosition(obj, camera);
+            		
             	}
             } 
         }
@@ -522,6 +519,28 @@ function removeEntity(object) {
         function getRandomInt(min, max) {
   			return Math.floor(Math.random() * (max - min)) + min;
 		}
+		
+		
+		function toScreenPosition(obj, camera)
+{
+    var vector = new THREE.Vector3();
+
+    var widthHalf = 0.5*renderer.context.canvas.width;
+    var heightHalf = 0.5*renderer.context.canvas.height;
+
+    obj.updateMatrixWorld();
+    vector.setFromMatrixPosition(obj.matrixWorld);
+    vector.project(camera);
+
+    vector.x = ( vector.x * widthHalf ) + widthHalf;
+    vector.y = - ( vector.y * heightHalf ) + heightHalf;
+
+    return { 
+        x: vector.x,
+        y: vector.y
+    };
+
+};
     </script>
 </body>
 
