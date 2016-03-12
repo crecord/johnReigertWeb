@@ -180,7 +180,8 @@
                     colors = [],
                     colors2 = [],
                     colors3 = [];
-
+				
+				// resolutions
                 n_sub = 9;
                 var position, index;
 
@@ -242,8 +243,8 @@
 
             scene.add( parentTransform );
 
-            raycaster = new THREE.Raycaster();
-            raycaster.linePrecision = 1;
+            //raycaster = new THREE.Raycaster();
+            //raycaster.linePrecision = 1;
 
             stats = new Stats();
             stats.domElement.style.position = 'absolute';
@@ -455,6 +456,20 @@ function removeEntity(object) {
 
             camera.lookAt(scene.position);
             
+            // new selection implementation 
+            // requires much less accuracy 
+            
+            var nearestDistance =0; 
+            var nearestIndex; 
+            
+            //iterate through all the lines.
+            console.log(parentTransfom.children.length); 
+            console.log(parentTransfom.children[0]); 
+            /*
+            for (var j =0; j< parentTransfom.children.length; j++ ){
+            	// now each point in the line. 
+            } 
+            */ 
             
             
 /// begin selection
