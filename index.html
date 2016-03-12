@@ -243,8 +243,8 @@
 
             scene.add( parentTransform );
 
-            //raycaster = new THREE.Raycaster();
-            //raycaster.linePrecision = 1;
+            raycaster = new THREE.Raycaster();
+            raycaster.linePrecision = 5;
 
             stats = new Stats();
             stats.domElement.style.position = 'absolute';
@@ -461,7 +461,7 @@ function removeEntity(object) {
             
             var nearestDistance =0; 
             var nearestIndex; 
-            
+            /*
             //iterate through all the lines.
         if(parentTransform.children.length > 0){
             for (var i =0; i< parentTransform.children.length; i++ ){
@@ -476,10 +476,10 @@ function removeEntity(object) {
             } 
         }
 
-            
+            */
             
 /// begin selection
-/*
+
             raycaster.setFromCamera(mouse, camera);
 
             var intersects = raycaster.intersectObjects( parentTransform.children , true);
@@ -509,7 +509,7 @@ function removeEntity(object) {
 
 					currentIntersected = undefined;
 				}
-		*/ 		
+		
 		//end selection 
             renderer.setClearColor(0xffffff, 1);
             renderer.render(scene, activeCamera);
