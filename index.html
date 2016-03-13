@@ -483,6 +483,11 @@ function removeEntity(object) {
 
             camera.lookAt(scene.position);
             
+            activeCamera.position.x += (mouseX - camera.position.x) * .05;
+           activeCamera.position.y += (-mouseY + 200 - camera.position.y) * .05;
+
+            activeCamera.lookAt(scene.position);
+            
 
 /// begin selection
 
