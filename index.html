@@ -398,7 +398,7 @@ function removeEntity(object) {
    						    y:0,
     						z:700
 						},3000)
-						.onComlete(function(){
+						.onComplete(function(){
 							isLineFollowing = false; 
 						}
 						)
@@ -558,7 +558,7 @@ function removeEntity(object) {
 			// toggle hover text
 			if(currentIntersected !== undefined ){
 				hoverTxt.style.display = "block"; 
-				hoverTxt.innerHTML = currentIntersected; 
+				hoverTxt.innerHTML = currentIntersected.id; 
 				console.log(currentIntersected);
 			}
 			else{
