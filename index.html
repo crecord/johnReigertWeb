@@ -126,7 +126,7 @@
 
 
             camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 1000);
-            cameraFollow = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 1, 400);
+            cameraFollow = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 1,1000);
             cameraFollow.position.x =0; 
             cameraFollow.position.y =0; 
             cameraFollow.position.z =50;
@@ -398,7 +398,7 @@ function removeEntity(object) {
         				var tween = new TWEEN.Tween(activeCamera.position).to({
     						x:0,
    						    y:0,
-    						z:50
+    						z:700
 						},2000)
 						.easing(TWEEN.Easing.Elastic.InOut);
 						
@@ -478,7 +478,7 @@ function removeEntity(object) {
         function render() {
 
 
-            camera.position.x += (mouseX - camera.position.x) * .05;
+           camera.position.x += (mouseX - camera.position.x) * .05;
            camera.position.y += (-mouseY + 200 - camera.position.y) * .05;
 
             camera.lookAt(scene.position);
