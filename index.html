@@ -432,7 +432,12 @@ function removeEntity(object) {
         		
         		var count = 0; 
         		if(currentlyBeingPlayed == undefined){
-        		
+        			
+        			var hoverTxt = document.getElementById("hoverText"); 
+					hoverTxt.style.display = "none"; 
+					
+
+
         			isCameraMove = false; 
         			
         			currentlyBeingPlayed = currentIntersected;
@@ -542,10 +547,10 @@ function removeEntity(object) {
 				}
 			
 			var hoverTxt = document.getElementById("hoverText"); 
-			console.log(hoverTxt); 
 			// toggle hover text
 			if(currentIntersected !== undefined ){
 				hoverTxt.style.display = "block"; 
+				hoverTxt.innerHTML = currentIntersected; 
 			}
 			else{
 				hoverTxt.style.display = "none"; 
