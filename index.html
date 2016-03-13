@@ -89,7 +89,7 @@
         var mouse = new THREE.Vector2();
         arrayOfAllLines = [];
 		var isCameraMove; 
-		var hoverText = getElementById("hoverText"); 
+		
 
         function init(myArr) {
 				// PLY file
@@ -541,12 +541,14 @@ function removeEntity(object) {
 					currentIntersected = undefined;
 				}
 			
+			var hoverTxt = getElementById("hoverText"); 
+			console.log(hoverTxt); 
 			// toggle hover text
 			if(currentIntersected !== undefined ){
-				hoverText.style.display = block; 
+				hoverTxt.style.display = block; 
 			}
 			else{
-				hoverText.style.display = none; 
+				hoverTxt.style.display = none; 
 			}
 		
 		//end selection 
