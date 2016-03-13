@@ -379,7 +379,7 @@ function removeEntity(object) {
         				currentAudio.pause();
         				removeEntity(scaledCurrentlyBeingPlayed);
         				removeEntity(spherePlayHead);
-        				//activeCamera = camera; 
+        				activeCamera = camera; 
         				cameraFollowHelper.visible = false;
         				count = 0; 
         				currentlyBeingPlayed = undefined;
@@ -387,9 +387,9 @@ function removeEntity(object) {
         				// this is the moment to animate the camera
         				
         				var tween = new TWEEN.Tween(activeCamera.position).to({
-    						x: camera.position.x,
-   						    y: camera.position.y,
-    						z: camera.position.z
+    						x: activeCamera.position.x +20,
+   						    y: activeCamera.position.y + 20,
+    						z: activeCamera.position.z +20
 						},3000);
 						tween.start();
 						}
