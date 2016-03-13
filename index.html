@@ -379,12 +379,23 @@ function removeEntity(object) {
         				currentAudio.pause();
         				removeEntity(scaledCurrentlyBeingPlayed);
         				removeEntity(spherePlayHead);
-        				activeCamera = camera; 
+        				//activeCamera = camera; 
         				cameraFollowHelper.visible = false;
         				count = 0; 
         				currentlyBeingPlayed = undefined;
         				clearInterval(stopSetInterval); 
         				// this is the moment to animate the camera
+        				
+        				var tween = new TWEEN.Tween(activeCamera.position).to({
+    						x: camera.position.x,
+   						    y: camera.position.y,
+    						z: camera.position.z
+						},3000);
+						tween.start();
+						}
+						}
+
+        				
         				
         				
         
@@ -448,28 +459,7 @@ function removeEntity(object) {
 
             camera.lookAt(scene.position);
             
-            // new selection implementation 
-            // requires much less accuracy 
-            
-            var nearestDistance =0; 
-            var nearestIndex; 
-            /*
-            //iterate through all the lines.
-        if(parentTransform.children.length > 0){
-            for (var i =0; i< parentTransform.children.length; i++ ){
-            	// now each point in the line. 
-            	for(var y=0; y < parentTransform.children[i].geometry.vertices.length; y++){
-            		var vertex= parentTransform.children[i].geometry.vertices[y]; 
-            		var obj =new THREE.Object3D();
-            		obj.position = vertex;
-            		var screenPos = toScreenPosition(obj, camera);
-            		
-            	}
-            } 
-        }
 
-            */
-            
 /// begin selection
 
             raycaster.setFromCamera(mouse, camera);
@@ -491,14 +481,13 @@ function removeEntity(object) {
 					//sphereInter.visible = true;
 					//sphereInter.position.copy( intersects[ 0 ].point );
 
-				} else {
-
+				} 
+				else {
 					if ( currentIntersected !== undefined ) {
 
 						currentIntersected.material.linewidth = 1;
 
 					}
-
 					currentIntersected = undefined;
 				}
 		
