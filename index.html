@@ -379,19 +379,33 @@ function removeEntity(object) {
         				currentAudio.pause();
         				removeEntity(scaledCurrentlyBeingPlayed);
         				removeEntity(spherePlayHead);
-        				activeCamera = camera; 
+        				
         				cameraFollowHelper.visible = false;
         				count = 0; 
         				currentlyBeingPlayed = undefined;
         				clearInterval(stopSetInterval); 
         				// this is the moment to animate the camera
         				
+        				//activeCamera = camera; 
+        				var startTarget = activeCamera.target; 
+        				var endTarget = camera.target; 
+        				var startPos = activeCamera.position; 
+        				var endPos = camera.position; 
+        				
         				var tween = new TWEEN.Tween(activeCamera.position).to({
-    						x: activeCamera.position.x +200,
-   						    y: activeCamera.position.y + 200,
-    						z: activeCamera.position.z +200
+    						x: endPos.x,
+   						    y: endPos.position.y,
+    						z: endPos.position.z
 						},1000);
 						tween.start();
+						
+						var tweenW = new TWEEN.Tween(activeCamera.target).to({
+    						x: endTarget.x,
+   						    y: endTarget.position.y,
+    						z: endTarget.position.z
+						},1000);
+						tweenW.start();
+						
 						}
 						}
 
