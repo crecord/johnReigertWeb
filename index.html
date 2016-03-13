@@ -392,6 +392,9 @@ function removeEntity(object) {
         				var startPos = activeCamera.position; 
         				var endPos = camera.position; 
         				
+        				activeCamera.position = endPos; 
+        				
+        				/*
         				var tween = new TWEEN.Tween(activeCamera.position).to({
     						x: endPos.x,
    						    y: endPos.y,
@@ -399,7 +402,7 @@ function removeEntity(object) {
 						},1000);
 						tween.start();
 						
-						/*
+						
 						var tweenW = new TWEEN.Tween(activeCamera.target).to({
     						x: endTarget.x,
    						    y: endTarget.y,
