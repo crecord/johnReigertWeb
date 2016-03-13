@@ -89,6 +89,7 @@
         var mouse = new THREE.Vector2();
         arrayOfAllLines = [];
 		var isCameraMove; 
+		var isLineFollowing; 
 		
 
         function init(myArr) {
@@ -397,6 +398,10 @@ function removeEntity(object) {
    						    y:0,
     						z:700
 						},3000)
+						.onComlete(function(){
+							isLineFollowing = false; 
+						}
+						)
 						.easing(TWEEN.Easing.Cubic.InOut);
 						
 						tween.start();
@@ -433,6 +438,7 @@ function removeEntity(object) {
         		var count = 0; 
         		if(currentlyBeingPlayed == undefined){
         			
+        			isLineFollowing = true; 
         			var hoverTxt = document.getElementById("hoverText"); 
 					hoverTxt.style.display = "none"; 
 					
@@ -476,6 +482,7 @@ function removeEntity(object) {
         					currentAudio = allAudio[rand]; 
         					console.log(currentAudio); 
         					currentAudio.play();
+
         					stopSetInterval = setInterval(function(){ moveColor()}, 10);
 						});
 						
@@ -516,6 +523,7 @@ function removeEntity(object) {
             }
 
 /// begin selection
+			if (!isLineFollowing){
 
             raycaster.setFromCamera(mouse, activeCamera);
 
@@ -551,9 +559,11 @@ function removeEntity(object) {
 			if(currentIntersected !== undefined ){
 				hoverTxt.style.display = "block"; 
 				hoverTxt.innerHTML = currentIntersected; 
+				console.log(currentIntersected);
 			}
 			else{
 				hoverTxt.style.display = "none"; 
+			}
 			}
 		
 		//end selection 
