@@ -37,7 +37,7 @@
 
 <body>
 
-	<p id= "hoverText" style="display:none; padding:20%; padding:20%; position:absolute;"> hello, here is some text </p> 
+	<p id= "hoverText" style="display:none; padding:20%; padding:20%; position:absolute; font-family:'Courier New', Courier, monospace"> hello, here is some text </p> 
     <audio style= "display:none;" id="myAudio1" src = "Sand.wav" controls loop>
     <a href = "Sand.wav">DoYou.ogg</a>
   </audio>
@@ -554,12 +554,12 @@ function removeEntity(object) {
 					currentIntersected = undefined;
 				}
 			
-			var hoverTxt = document.getElementById("hoverText"); 
+			
 			// toggle hover text
 			if(currentIntersected !== undefined ){
 				hoverTxt.style.display = "block"; 
 				hoverTxt.innerHTML = currentIntersected.id; 
-				console.log(currentIntersected);
+				console.log(currentIntersected.id);
 			}
 			else{
 				hoverTxt.style.display = "none"; 
