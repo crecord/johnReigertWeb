@@ -37,7 +37,7 @@
 
 <body>
 
-	<p id= "hoverText"> hello, here is some text </p> 
+	<p id= "hoverText" style="display:none; margin-left:20%; margin-top:20%"> hello, here is some text </p> 
     <audio style= "display:none;" id="myAudio1" src = "Sand.wav" controls loop>
     <a href = "Sand.wav">DoYou.ogg</a>
   </audio>
@@ -89,6 +89,7 @@
         var mouse = new THREE.Vector2();
         arrayOfAllLines = [];
 		var isCameraMove; 
+		var hoverText = getElementById("hoverText"); 
 
         function init(myArr) {
 				// PLY file
@@ -539,6 +540,14 @@ function removeEntity(object) {
 					}
 					currentIntersected = undefined;
 				}
+			
+			// toggle hover text
+			if(currentIntersected !== undefined ){
+				hoverText.style.display = block; 
+			}
+			else{
+				hoverText.style.display = none; 
+			}
 		
 		//end selection 
             renderer.setClearColor(0xffffff, 1);
