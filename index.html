@@ -388,14 +388,6 @@ function removeEntity(object) {
         				clearInterval(stopSetInterval); 
         				// this is the moment to animate the camera
         				
-        				//activeCamera = camera; 
-        				var startTarget = activeCamera.target; 
-        				var endTarget = camera.target; 
-        				var startPos = activeCamera.position; 
-        				var endPos = camera.position; 
-        				
-        				//activeCamera.position = endPos; 
-        				
         			
         				var tween = new TWEEN.Tween(activeCamera.position).to({
     						x:0,
@@ -437,7 +429,22 @@ function removeEntity(object) {
         		
         		var count = 0; 
         		if(currentlyBeingPlayed == undefined){
-        			scene.add(spherePlayHead);
+        		
+        			// find the first points
+        			isCameraMove = false; 
+        			
+        			count++; 
+        			var scaledPositionVector = scaledCurrentlyBeingPlayed.geometry.vertices[count].clone();
+                    scaledPositionVector.applyMatrix4(scaledCurrentlyBeingPlayed.matrixWorld );
+                    	        		
+        			var tween = new TWEEN.Tween(activeCamera.position).to({
+    						x:scaledPositionVector.x,
+   						    y:scaledPositionVector.y,
+    						z:scaledPositionVector.z
+						},3000)
+						.easing(TWEEN.Easing.Cubic.InOut)
+						.onComplete(function() {
+						scene.add(spherePlayHead);
         			currentlyBeingPlayed = currentIntersected;
         			console.log(currentlyBeingPlayed.scale);
         			
@@ -459,8 +466,15 @@ function removeEntity(object) {
         			currentAudio = allAudio[rand]; 
         			console.log(currentAudio); 
         			currentAudio.play();
-        			isCameraMove = false; 
         			stopSetInterval = setInterval(function(){ moveColor()}, 10);
+						});
+						tween.start();
+						
+						
+						
+        			
+        			
+        			
         		 }
         		
         	}
