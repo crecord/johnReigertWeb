@@ -399,17 +399,24 @@ function removeEntity(object) {
     						x:0,
    						    y:0,
     						z:50
-						},2000);
+						},2000)
+						.easing(TWEEN.Easing.Elastic.InOut)
+						.onUpdate(update);
+						
 						tween.start();
 						
-							/*
-						var tweenW = new TWEEN.Tween(activeCamera.target).to({
-    						x: endTarget.x,
-   						    y: endTarget.y,
-    						z: endTarget.z
-						},1000);
+				
+						var tweenW = new TWEEN.Tween(activeCamera.rotation).to({
+    						x: 0,
+   						    y: 0,
+    						z: 0
+						},2000)
+						.easing(TWEEN.Easing.Elastic.InOut)
+						.onUpdate(update);
+						
+						
 						tweenW.start();
-						*/ 
+						
 						
 						}
 						}
