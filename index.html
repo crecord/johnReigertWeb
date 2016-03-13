@@ -430,23 +430,8 @@ function removeEntity(object) {
         		var count = 0; 
         		if(currentlyBeingPlayed == undefined){
         		
-        			// find the first points
         			isCameraMove = false; 
         			
-        			count++; 
-        			var scaledPositionVector = scaledCurrentlyBeingPlayed.geometry.vertices[count].clone();
-                    scaledPositionVector.applyMatrix4(scaledCurrentlyBeingPlayed.matrixWorld );
-                    console.log("startNow!");      
-                    console.log(scaledPositionVector);    		
-        			var tweenf = new TWEEN.Tween(activeCamera.position).to({
-    						x:scaledPositionVector.x,
-   						    y:scaledPositionVector.y,
-    						z:scaledPositionVector.z
-						},3000)
-						.easing(TWEEN.Easing.Cubic.InOut)
-						.onComplete(function() {
-						console.log("yo!");
-						scene.add(spherePlayHead);
         			currentlyBeingPlayed = currentIntersected;
         			console.log(currentlyBeingPlayed.scale);
         			
@@ -461,14 +446,29 @@ function removeEntity(object) {
 					console.log(scaledCurrentlyBeingPlayed);
 					scaledCurrentlyBeingPlayed.visible=false;
         			scene.add(scaledCurrentlyBeingPlayed);
-        			activeCamera = cameraFollow;  
-        			cameraFollowHelper.visible = false;
-        			var rand = getRandomInt(0,3);
-        			console.log(rand); 
-        			currentAudio = allAudio[rand]; 
-        			console.log(currentAudio); 
-        			currentAudio.play();
-        			stopSetInterval = setInterval(function(){ moveColor()}, 10);
+        			
+        			count++; 
+        			var scaledPositionVector = scaledCurrentlyBeingPlayed.geometry.vertices[count].clone();
+                    scaledPositionVector.applyMatrix4(scaledCurrentlyBeingPlayed.matrixWorld );
+                    console.log("startNow!");      
+                    console.log(scaledPositionVector);    		
+        			var tweenf = new TWEEN.Tween(activeCamera.position).to({
+    						x:scaledPositionVector.x,
+   						    y:scaledPositionVector.y,
+    						z:scaledPositionVector.z
+						},3000)
+						.easing(TWEEN.Easing.Cubic.InOut)
+						.onComplete(function() {
+							console.log("yo!");
+							scene.add(spherePlayHead);
+        					activeCamera = cameraFollow;  
+        					cameraFollowHelper.visible = false;
+        					var rand = getRandomInt(0,3);
+        					console.log(rand); 
+        					currentAudio = allAudio[rand]; 
+        					console.log(currentAudio); 
+        					currentAudio.play();
+        					stopSetInterval = setInterval(function(){ moveColor()}, 10);
 						});
 						
 						tweenf.start();
