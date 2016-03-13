@@ -126,15 +126,15 @@
             document.body.appendChild(container);
 
 			isCameraMove = true; 
-            camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 1000);
+            activeCamera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 1000);
             cameraFollow = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 1,1000);
             cameraFollow.position.x =0; 
             cameraFollow.position.y =0; 
             cameraFollow.position.z =50;
             cameraFollowHelper = new THREE.CameraHelper( cameraFollow );
             //cameraFollowHelper.visible = false;
-            camera.position.z = 700;
-			activeCamera = camera; 
+            activeCamera.position.z = 700;
+			//activeCamera = camera; 
 			
             scene = new THREE.Scene();
             //scene.add(cameraFollowHelper); 
@@ -509,7 +509,7 @@ function removeEntity(object) {
 
 /// begin selection
 
-            raycaster.setFromCamera(mouse, camera);
+            raycaster.setFromCamera(mouse, activeCamera);
 
             var intersects = raycaster.intersectObjects( parentTransform.children , true);
 
