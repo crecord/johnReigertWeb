@@ -556,6 +556,7 @@ function removeEntity(object) {
 			
 			
 			// toggle hover text
+			var hoverTxt = document.getElementById("hoverText"); 
 			if(currentIntersected !== undefined ){
 				hoverTxt.style.display = "block"; 
 				hoverTxt.innerHTML = currentIntersected.id; 
