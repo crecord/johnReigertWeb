@@ -436,14 +436,16 @@ function removeEntity(object) {
         			count++; 
         			var scaledPositionVector = scaledCurrentlyBeingPlayed.geometry.vertices[count].clone();
                     scaledPositionVector.applyMatrix4(scaledCurrentlyBeingPlayed.matrixWorld );
-                    	        		
-        			var tween = new TWEEN.Tween(activeCamera.position).to({
+                    console.log("startNow!");      
+                    console.log(scaledPositionVector);    		
+        			var tweenf = new TWEEN.Tween(activeCamera.position).to({
     						x:scaledPositionVector.x,
    						    y:scaledPositionVector.y,
     						z:scaledPositionVector.z
 						},3000)
 						.easing(TWEEN.Easing.Cubic.InOut)
 						.onComplete(function() {
+						console.log("yo!");
 						scene.add(spherePlayHead);
         			currentlyBeingPlayed = currentIntersected;
         			console.log(currentlyBeingPlayed.scale);
@@ -468,7 +470,8 @@ function removeEntity(object) {
         			currentAudio.play();
         			stopSetInterval = setInterval(function(){ moveColor()}, 10);
 						});
-						tween.start();
+						
+						tweenf.start();
 						
 						
 						
