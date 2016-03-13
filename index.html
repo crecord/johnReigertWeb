@@ -86,6 +86,7 @@
 		var allAudio = []; 
         var mouse = new THREE.Vector2();
         arrayOfAllLines = [];
+		var isCameraMove; 
 
         function init(myArr) {
 				// PLY file
@@ -124,7 +125,7 @@
             container = document.createElement('div');
             document.body.appendChild(container);
 
-
+			isCameraMove = true; 
             camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 1000);
             cameraFollow = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 1,1000);
             cameraFollow.position.x =0; 
@@ -376,6 +377,7 @@ function removeEntity(object) {
                     	//camera.lookAt(scene.position);
         			}
         			else{
+        				isCameraMove = true; 
         				currentAudio.pause();
         				removeEntity(scaledCurrentlyBeingPlayed);
         				removeEntity(spherePlayHead);
@@ -457,6 +459,7 @@ function removeEntity(object) {
         			currentAudio = allAudio[rand]; 
         			console.log(currentAudio); 
         			currentAudio.play();
+        			isCameraMove = false; 
         			stopSetInterval = setInterval(function(){ moveColor()}, 10);
         		 }
         		
@@ -477,17 +480,15 @@ function removeEntity(object) {
 
         function render() {
 
-
+		if(isCameraMove){
            camera.position.x += (mouseX - camera.position.x) * .05;
            camera.position.y += (-mouseY + 200 - camera.position.y) * .05;
-
-            camera.lookAt(scene.position);
+           camera.lookAt(scene.position);
             
-            activeCamera.position.x += (mouseX - camera.position.x) * .05;
+           activeCamera.position.x += (mouseX - camera.position.x) * .05;
            activeCamera.position.y += (-mouseY + 200 - camera.position.y) * .05;
-
-            activeCamera.lookAt(scene.position);
-            
+           activeCamera.lookAt(scene.position);
+            }
 
 /// begin selection
 
