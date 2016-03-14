@@ -140,12 +140,12 @@
             cameraFollow.position.y =0; 
             cameraFollow.position.z =50;
             cameraFollowHelper = new THREE.CameraHelper( cameraFollow );
-            //cameraFollowHelper.visible = false;
+            cameraFollowHelper.visible = false;
             camera.position.z = 700;
 			activeCamera = camera; 
 			
             scene = new THREE.Scene();
-            //scene.add(cameraFollowHelper); 
+            scene.add(cameraFollowHelper); 
 
 			cameraRig = new THREE.Object3D();
 			cameraRig.add( cameraFollow );
