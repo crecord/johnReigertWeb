@@ -36,7 +36,7 @@
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
                  myArr = JSON.parse(xmlhttp.responseText);
 
-                init();
+                init(myArr);
                 animate();
             }
         }
@@ -212,6 +212,8 @@
 		//animate();
 
 		function init() {
+
+			console.log("initing thingz");
 
 			container = document.createElement('div');
 			document.body.appendChild(container);
