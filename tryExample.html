@@ -30,12 +30,13 @@
 
 		var xmlhttp = new XMLHttpRequest();
         var url = "johnLines.json";
+        var myArr; 
 
         xmlhttp.onreadystatechange = function() {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                var myArr = JSON.parse(xmlhttp.responseText);
+                 myArr = JSON.parse(xmlhttp.responseText);
 
-                init(myArr);
+                init();
                 animate();
             }
         }
