@@ -101,8 +101,8 @@
                     var material = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x111111, shininess: 200, vertexColors: THREE.VertexColors} );
                     //var material = new THREE.MeshStandardMaterial( {color: 0x0055ff, specular: 0x111111, shininess: 200 } );
                     var mesh = new THREE.Mesh( geometry, material );
-                    mesh.scale.multiplyScalar( 4.38 );
-                    mesh.position.y = 3.5;
+                    mesh.scale.multiplyScalar( 4.46 );
+                    mesh.position.y = -1.16;
                     mesh.rotation.x = -1.5;
                     mesh.rotation.z = -0.5
                     scene.add( mesh );
@@ -396,7 +396,7 @@ function removeEntity(object) {
                         var tween = new TWEEN.Tween(activeCamera.position).to({
                             x:0,
                             y:0,
-                            z:700
+                            z:1000
                         },3000)
                         .onComplete(function(){
                             isLineFollowing = false; 
