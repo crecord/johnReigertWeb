@@ -98,7 +98,7 @@
 
         function init(myArr) {
 				// PLY file
-
+				/*
 				var loader = new THREE.PLYLoader();
 				loader.load( 'john3.ply', function ( geometry ) {
 					geometry.computeFaceNormals();
@@ -111,7 +111,7 @@
 					mesh.rotation.z = -0.5
 					scene.add( mesh );
 				});
-
+				*/ 
 				// Lights
 
 				//scene.add( new THREE.HemisphereLight( 0x443333, 0x111122 ) );
@@ -180,7 +180,7 @@
                 }
 
                 var newSpline = new THREE.CatmullRomCurve3(points);
-				tube = new THREE.TubeGeometry(newSpline, 400, 2, 4, false);
+				tube = new THREE.TubeGeometry(newSpline, 200, 2, 4, false);
 
 				tubeMesh = THREE.SceneUtils.createMultiMaterialObject( tube, [
 				new THREE.MeshLambertMaterial({
@@ -356,6 +356,132 @@ function removeEntity(object) {
         function moveColor(){
         	console.log("different now");
         	console.log(currentlyBeingPlayed);
+
+        	      if (count< currentlyBeingPlayed.geometry.colors.length - 1){
+        				currentlyBeingPlayed.geometry.colors[count].setRGB(0,238,207);
+                    	currentlyBeingPlayed.geometry.colorsNeedUpdate = true; 
+                    	count++;
+                    	
+                    	//new THREE.Vector3(
+                    	
+                    	var scaledPositionVector = scaledCurrentlyBeingPlayed.geometry.vertices[count].clone();
+                    	scaledPositionVector.applyMatrix4(scaledCurrentlyBeingPlayed.matrixWorld );
+                    	
+                    	cameraFollow.position.x = scaledPositionVector.x  ;
+                    	cameraFollow.position.y = scaledPositionVector.y ;
+                    	cameraFollow.position.z = scaledPositionVector.z ;
+                    	
+                    	var scaledVector = currentlyBeingPlayed.geometry.vertices[count].clone();
+                    	
+                    	scaledVector.applyMatrix4( currentlyBeingPlayed.matrixWorld );
+                    	
+                    	var scaledVectorBehind = scaledVector;
+                    	
+                    	if(count > 19){
+                    		scaledVectorBehind = currentlyBeingPlayed.geometry.vertices[count - 20 ].clone();
+                    		scaledVectorBehind.applyMatrix4( currentlyBeingPlayed.matrixWorld );
+                    	}
+                    	
+                    	
+                    	
+                    	
+                    	cameraFollow.lookAt(scaledVector);
+                    	
+                    	spherePlayHead.position.y = scaledVector.y; 
+                    	spherePlayHead.position.z = scaledVector.z; 
+                    	spherePlayHead.position.x = scaledVector.x; 
+                    	
+                    	//cameraRig.lookAt(scaledVector.x, scaledVector.y, scaledVector.z);
+                    	//cameraRig.lookAt(scaledVector);
+                    	//cameraRig.lookAt(currentlyBeingPlayed.geometry.vertices[count + 20]);
+                    	cameraFollow.updateProjectionMatrix();
+
+						cameraFollowHelper.update();
+						//cameraFollowHelper.visible = true;
+                    	//console.log(cameraFollow);
+                    	//camera.lookAt(camera.scenePosition);
+                    	//camera.lookAt(scene.position);
+        			}
+        			else{
+        				isCameraMove = true; 
+        				currentAudio.pause();
+        				removeEntity(scaledCurrentlyBeingPlayed);
+        				removeEntity(spherePlayHead);
+        				
+        				cameraFollowHelper.visible = false;
+        				count = 0; 
+        				currentlyBeingPlayed = undefined;
+        				clearInterval(stopSetInterval); 
+        				// this is the moment to animate the camera
+        				
+        			
+        				var tween = new TWEEN.Tween(activeCamera.position).to({
+    						x:0,
+   						    y:0,
+    						z:700
+						},3000)
+						.onComplete(function(){
+							isLineFollowing = false; 
+						}
+						)
+						.easing(TWEEN.Easing.Cubic.InOut);
+						
+						tween.start();
+						
+				
+						var tweenW = new TWEEN.Tween(activeCamera.rotation).to({
+    						x: 0,
+   						    y: 0,
+    						z: 0
+						},3000)
+						.easing(TWEEN.Easing.Cubic.InOut);
+						
+						
+						tweenW.start();
+						
+						
+						}*/
+
+
+  			/*
+        			console.log(currentlyBeingPlayed.scale);
+        			
+        			scaledCurrentlyBeingPlayed = currentlyBeingPlayed.clone();        			
+        			scaledCurrentlyBeingPlayed.scale.x = 4; 
+        			scaledCurrentlyBeingPlayed.scale.y = 4; 
+        			scaledCurrentlyBeingPlayed.scale.z = 4; 
+        			
+        			scaledCurrentlyBeingPlayed.rotation.x = -1.5;
+					scaledCurrentlyBeingPlayed.rotation.z = -.5;
+					
+					console.log(scaledCurrentlyBeingPlayed);
+					scaledCurrentlyBeingPlayed.visible=false;
+        			scene.add(scaledCurrentlyBeingPlayed);
+        			
+        			count++; 
+        			var scaledPositionVector = scaledCurrentlyBeingPlayed.geometry.vertices[count].clone();
+                    scaledPositionVector.applyMatrix4(scaledCurrentlyBeingPlayed.matrixWorld );
+                    */
+
+/*		
+
+
+                    console.log("startNow!");      
+                    console.log(scaledPositionVector);    		
+        			var tweenf = new TWEEN.Tween(activeCamera.position).to({
+    						x:scaledPositionVector.x,
+   						    y:scaledPositionVector.y,
+    						z:scaledPositionVector.z
+						},3000)
+						.easing(TWEEN.Easing.Cubic.InOut)
+						.onComplete(function() {
+							
+						});
+						
+						tweenf.start();
+						
+					*/
+
 
 		}
 
