@@ -26,6 +26,23 @@
 
 
 		<script>
+
+
+		var xmlhttp = new XMLHttpRequest();
+        var url = "johnLines.json";
+
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                var myArr = JSON.parse(xmlhttp.responseText);
+
+                init(myArr);
+                animate();
+            }
+        }
+        xmlhttp.open("GET", url, true);
+        xmlhttp.send();
+
+
 		var container, stats;
 
 		var camera, scene, renderer, splineCamera, cameraHelper, cameraEye;
@@ -100,7 +117,8 @@
 
 		function addTube() {
 
-			var value = document.getElementById('dropdown').value;
+
+
 
 			var segments = parseInt(document.getElementById('segments').value);
 			closed2 = document.getElementById('closed').checked;
@@ -109,12 +127,28 @@
 
 			if (tubeMesh) parent.remove(tubeMesh);
 
-			extrudePath = splines[value];
+			 for (var j = 1; j < 1; j++) {
+                var points = [];
+                var rawArrayofPoints = myArr.scribbles[j].line;
+                for (i = 0; i < rawArrayofPoints.length; i += 3) {
+                    var threeVector = new THREE.Vector3(rawArrayofPoints[i], rawArrayofPoints[i + 1], rawArrayofPoints[i + 2])
+                    points.push(threeVector);
+                }
 
-			tube = new THREE.TubeGeometry(extrudePath, segments, 2, radiusSegments, closed2);
+                var newSpline = new THREE.CatmullRomCurve3(points);
+				tube = new THREE.TubeGeometry(newSpline, segments, 2, radiusSegments, closed2);
 
-			addGeometry(tube, 0xff00ff);
-			setScale();
+				tubeMesh = THREE.SceneUtils.createMultiMaterialObject( tube, [
+				new THREE.MeshLambertMaterial({
+					color: 0xff00ff
+				}),
+				new THREE.MeshBasicMaterial({
+					color: 0x000000,
+					opacity: 0.3,
+					wireframe: true,
+					transparent: true
+				})]);
+				setScale();
 
 		}
 
@@ -191,6 +225,8 @@
 
 			//
 
+
+
 			camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.01, 1000);
 			camera.position.set(0, 50, 500);
 
@@ -211,6 +247,10 @@
 			scene.add( cameraHelper );
 
 			addTube();
+
+
+
+
 
 			// Debug point
 
