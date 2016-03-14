@@ -145,7 +145,7 @@
 			activeCamera = camera; 
 			
             scene = new THREE.Scene();
-            scene.add(cameraFollowHelper); 
+            //scene.add(cameraFollowHelper); 
 
 			cameraRig = new THREE.Object3D();
 			cameraRig.add( cameraFollow );
@@ -180,7 +180,6 @@
                 }
 
                 var newSpline = new THREE.CatmullRomCurve3(points);
-                //tube = new THREE.TubeGeometry(extrudePath, segments, 2, radiusSegments, closed2);
 				tube = new THREE.TubeGeometry(newSpline, 200, 2, 4, false);
 
 				tubeMesh = THREE.SceneUtils.createMultiMaterialObject( tube, [
@@ -522,7 +521,7 @@ function removeEntity(object) {
                     console.log("yo!");
 							scene.add(spherePlayHead);
         					activeCamera = cameraFollow;  
-        					cameraFollowHelper.visible = true;
+        					cameraFollowHelper.visible = false;
         					var rand = getRandomInt(0,3);
         					console.log(rand); 
         					currentAudio = allAudio[rand]; 
