@@ -356,11 +356,12 @@ function removeEntity(object) {
         function moveColor(){
         	console.log("different now");
         	console.log(currentlyBeingPlayed);
-
-        	      if (count< currentlyBeingPlayed.geometry.colors.length - 1){
         			var time = Date.now();
 					var looptime = 20 * 1000;
 					var t = ( time % looptime ) / looptime;
+
+        	      if (time % looptime != 0){
+        			
 					var scale =1; 
 		
 					var pos = currentlyBeingPlayed.parameters.path.getPointAt( t );
