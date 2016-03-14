@@ -384,7 +384,8 @@ function removeEntity(object) {
 
         			isCameraMove = false; 
         			
-        			currentlyBeingPlayed = currentIntersected;
+        			currentlyBeingPlayed = currentIntersected.geometry;
+        			/*
         			console.log(currentlyBeingPlayed.scale);
         			
         			scaledCurrentlyBeingPlayed = currentlyBeingPlayed.clone();        			
@@ -402,16 +403,9 @@ function removeEntity(object) {
         			count++; 
         			var scaledPositionVector = scaledCurrentlyBeingPlayed.geometry.vertices[count].clone();
                     scaledPositionVector.applyMatrix4(scaledCurrentlyBeingPlayed.matrixWorld );
-                    console.log("startNow!");      
-                    console.log(scaledPositionVector);    		
-        			var tweenf = new TWEEN.Tween(activeCamera.position).to({
-    						x:scaledPositionVector.x,
-   						    y:scaledPositionVector.y,
-    						z:scaledPositionVector.z
-						},3000)
-						.easing(TWEEN.Easing.Cubic.InOut)
-						.onComplete(function() {
-							console.log("yo!");
+                    */
+
+                    console.log("yo!");
 							scene.add(spherePlayHead);
         					activeCamera = cameraFollow;  
         					cameraFollowHelper.visible = false;
@@ -422,12 +416,26 @@ function removeEntity(object) {
         					currentAudio.play();
 
         					stopSetInterval = setInterval(function(){ moveColor()}, 10);
+
+        			/*		
+
+
+                    console.log("startNow!");      
+                    console.log(scaledPositionVector);    		
+        			var tweenf = new TWEEN.Tween(activeCamera.position).to({
+    						x:scaledPositionVector.x,
+   						    y:scaledPositionVector.y,
+    						z:scaledPositionVector.z
+						},3000)
+						.easing(TWEEN.Easing.Cubic.InOut)
+						.onComplete(function() {
+							
 						});
 						
 						tweenf.start();
 						
-						
-						
+					*/	
+					
         			
         			
         			
