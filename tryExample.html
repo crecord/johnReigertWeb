@@ -145,11 +145,10 @@
                 var newSpline = new THREE.CatmullRomCurve3(points);
 				tube = new THREE.TubeGeometry(newSpline, segments, 2, radiusSegments, closed2);
 
-				tubeMesh = THREE.SceneUtils.createMultiMaterialObject( tube, [
+	
+				
 			}
-
 			console.log(tube);
-
 
 			var segments = parseInt(document.getElementById('segments').value);
 			closed2 = document.getElementById('closed').checked;
