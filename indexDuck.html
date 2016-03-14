@@ -130,14 +130,14 @@
             document.body.appendChild(container);
 
             isCameraMove = true; 
-            camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 1000);
-            cameraFollow = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 1,1000);
+            camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
+            cameraFollow = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 1,2000);
             cameraFollow.position.x =0; 
             cameraFollow.position.y =0; 
             cameraFollow.position.z =50;
             cameraFollowHelper = new THREE.CameraHelper( cameraFollow );
             //cameraFollowHelper.visible = false;
-            camera.position.z = 700;
+            camera.position.z = 1000;
             activeCamera = camera; 
             
             scene = new THREE.Scene();
