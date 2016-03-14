@@ -140,7 +140,7 @@
             cameraFollow.position.y =0; 
             cameraFollow.position.z =50;
             cameraFollowHelper = new THREE.CameraHelper( cameraFollow );
-            cameraFollowHelper.visible = false;
+            //cameraFollowHelper.visible = false;
             camera.position.z = 700;
 			activeCamera = camera; 
 			
@@ -521,7 +521,7 @@ function removeEntity(object) {
 
                     console.log("yo!");
 							scene.add(spherePlayHead);
-        					//activeCamera = cameraFollow;  
+        					activeCamera = cameraFollow;  
         					cameraFollowHelper.visible = true;
         					var rand = getRandomInt(0,3);
         					console.log(rand); 
