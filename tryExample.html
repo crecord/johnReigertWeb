@@ -116,7 +116,7 @@
 		var showCameraHelper = false;
 
 		function addTube() {
-
+				/*
 			var value = document.getElementById('dropdown').value;
 
 			var segments = parseInt(document.getElementById('segments').value);
@@ -132,15 +132,8 @@
 
 			addGeometry(tube, 0xff00ff);
 			setScale();
-
-			/*
-			var segments = parseInt(document.getElementById('segments').value);
-			closed2 = document.getElementById('closed').checked;
-
-			var radiusSegments = parseInt(document.getElementById('radiusSegments').value);
-
-			if (tubeMesh) parent.remove(tubeMesh);
-
+			*/
+		
 			for (var j = 1; j < 1; j++) {
                 var points = [];
                 var rawArrayofPoints = myArr.scribbles[j].line;
@@ -153,18 +146,21 @@
 				tube = new THREE.TubeGeometry(newSpline, segments, 2, radiusSegments, closed2);
 
 				tubeMesh = THREE.SceneUtils.createMultiMaterialObject( tube, [
-				new THREE.MeshLambertMaterial({
-					color: 0xff00ff
-				}),
-				new THREE.MeshBasicMaterial({
-					color: 0x000000,
-					opacity: 0.3,
-					wireframe: true,
-					transparent: true
-				})]);
-				setScale();
 			}
-			*/
+
+			console.log(tube);
+
+
+			var segments = parseInt(document.getElementById('segments').value);
+			closed2 = document.getElementById('closed').checked;
+
+			var radiusSegments = parseInt(document.getElementById('radiusSegments').value);
+
+			if (tubeMesh) parent.remove(tubeMesh);
+
+			addGeometry(tube, 0xff00ff);
+			setScale();
+			
 		}
 
 		function setScale() {
