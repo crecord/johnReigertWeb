@@ -117,15 +117,30 @@
 
 		function addTube() {
 
-
-
+			var value = document.getElementById('dropdown').value;
 
 			var segments = parseInt(document.getElementById('segments').value);
 			closed2 = document.getElementById('closed').checked;
 
 			var radiusSegments = parseInt(document.getElementById('radiusSegments').value);
 
-			
+			if (tubeMesh) parent.remove(tubeMesh);
+
+			extrudePath = splines[value];
+
+			tube = new THREE.TubeGeometry(extrudePath, segments, 2, radiusSegments, closed2);
+
+			addGeometry(tube, 0xff00ff);
+			setScale();
+
+			/*
+			var segments = parseInt(document.getElementById('segments').value);
+			closed2 = document.getElementById('closed').checked;
+
+			var radiusSegments = parseInt(document.getElementById('radiusSegments').value);
+
+			if (tubeMesh) parent.remove(tubeMesh);
+
 			for (var j = 1; j < 1; j++) {
                 var points = [];
                 var rawArrayofPoints = myArr.scribbles[j].line;
@@ -149,7 +164,7 @@
 				})]);
 				setScale();
 			}
-
+			*/
 		}
 
 		function setScale() {
