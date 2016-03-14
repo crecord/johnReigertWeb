@@ -138,7 +138,7 @@
 			for (var j = 3; j < 4; j++) {
                 var points = [];
                 var rawArrayofPoints = myArr.scribbles[j].line;
-                for (i = 0; i < rawArrayofPoints.length; i += 12) {
+                for (i = 0; i < rawArrayofPoints.length; i += 24) {
                     var threeVector = new THREE.Vector3(rawArrayofPoints[i], rawArrayofPoints[i + 1], rawArrayofPoints[i + 2])
                     points.push(threeVector);
                 }
