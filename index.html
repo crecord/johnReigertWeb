@@ -180,6 +180,7 @@
                 }
 
                 var newSpline = new THREE.CatmullRomCurve3(points);
+                //tube = new THREE.TubeGeometry(extrudePath, segments, 2, radiusSegments, closed2);
 				tube = new THREE.TubeGeometry(newSpline, 200, 2, 4, false);
 
 				tubeMesh = THREE.SceneUtils.createMultiMaterialObject( tube, [
@@ -399,7 +400,6 @@ function removeEntity(object) {
 		
 		
 					// Camera Orientation 2 - up orientation via normal
-					if (!lookAhead)
 					lookAt.copy( pos ).add( dir );
 					cameraFollow.matrix.lookAt(cameraFollow.position, lookAt, normal);
 					cameraFollow.rotation.setFromRotationMatrix( cameraFollow.matrix, cameraFollow.		rotation.order );
