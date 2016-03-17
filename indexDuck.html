@@ -357,23 +357,24 @@ function removeEntity(object) {
                         currentlyBeingPlayed.geometry.colorsNeedUpdate = true; 
                         count++;
                         
-                        camPos = cameraPos(); 
+                         var scaledPositionVector = scaledCurrentlyBeingPlayed.geometry.vertices[count].clone();
+            scaledPositionVector.applyMatrix4(scaledCurrentlyBeingPlayed.matrixWorld );
                         
                         // set the camera at that position 
-                        cameraFollow.position.x = camPos.x  ;
-                        cameraFollow.position.y = camPos.y ;
-                        cameraFollow.position.z = camPos.z ;
+                        cameraFollow.position.x = scaledPositionVector.x  ;
+                        cameraFollow.position.y = scaledPositionVector.y ;
+                        cameraFollow.position.z = scaledPositionVector.z ;
                         
                         var posToLookAt = cameraLookAtPos(); 
                         
 
-                        /*
+                     
                         var scaledVectorBehind = scaledVector;
                         if(count > 19){
                             scaledVectorBehind = currentlyBeingPlayed.geometry.vertices[count - 20 ].clone();
                             scaledVectorBehind.applyMatrix4( currentlyBeingPlayed.matrixWorld );
                         }
-                        */
+                        
                         
                         //set the look at position
                         cameraFollow.lookAt(posToLookAt);
