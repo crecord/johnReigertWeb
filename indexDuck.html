@@ -94,7 +94,7 @@
 
         function init(myArr) {
                 // PLY file
-                console.log("AAA");
+                console.log("BBB");
                 var loader = new THREE.PLYLoader();
                 loader.load( 'duck3.ply', function ( geometry ) {
                     geometry.computeFaceNormals();
@@ -353,35 +353,21 @@ function removeEntity(object) {
                         currentlyBeingPlayed.geometry.colorsNeedUpdate = true; 
                         count++;
                         
-                        //new THREE.Vector3(
-                        /*
-                        var scaledPositionVector = scaledCurrentlyBeingPlayed.geometry.vertices[count].clone();
-                        scaledPositionVector.applyMatrix4(scaledCurrentlyBeingPlayed.matrixWorld );
-                        */ 
+                        
                          var camPos = cameraPos();
                         cameraFollow.position.x = camPos.x  ;
                         cameraFollow.position.y = camPos.y ;
                         cameraFollow.position.z = camPos.z ;
                         
-                        var scaledVector = currentlyBeingPlayed.geometry.vertices[count].clone();
-                        
-                        scaledVector.applyMatrix4( currentlyBeingPlayed.matrixWorld );
-                        
-                        var scaledVectorBehind = scaledVector;
-                        
-                        if(count > 19){
-                            scaledVectorBehind = currentlyBeingPlayed.geometry.vertices[count - 20 ].clone();
-                            scaledVectorBehind.applyMatrix4( currentlyBeingPlayed.matrixWorld );
-                        }
                         
                         
-                        console.log("hey is this updating...");
+                        var camLookAt = cameraLookAtPos(); 
                         
-                        cameraFollow.lookAt(scaledVector);
+                        cameraFollow.lookAt(camLookAt);
                         
-                        spherePlayHead.position.y = scaledVector.y; 
-                        spherePlayHead.position.z = scaledVector.z; 
-                        spherePlayHead.position.x = scaledVector.x; 
+                        spherePlayHead.position.y = camLookAt.y; 
+                        spherePlayHead.position.z = camLookAt.z; 
+                        spherePlayHead.position.x = camLookAt.x; 
                         
                         //cameraRig.lookAt(scaledVector.x, scaledVector.y, scaledVector.z);
                         //cameraRig.lookAt(scaledVector);
