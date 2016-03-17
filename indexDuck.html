@@ -368,17 +368,11 @@ function removeEntity(object) {
                         spherePlayHead.position.y = camLookAt.y; 
                         spherePlayHead.position.z = camLookAt.z; 
                         spherePlayHead.position.x = camLookAt.x; 
-                        
-                        //cameraRig.lookAt(scaledVector.x, scaledVector.y, scaledVector.z);
-                        //cameraRig.lookAt(scaledVector);
-                        //cameraRig.lookAt(currentlyBeingPlayed.geometry.vertices[count + 20]);
+
                         cameraFollow.updateProjectionMatrix();
 
                         cameraFollowHelper.update();
-                        //cameraFollowHelper.visible = true;
-                        //console.log(cameraFollow);
-                        //camera.lookAt(camera.scenePosition);
-                        //camera.lookAt(scene.position);
+
                     }
                     else{
                         isCameraMove = true; 
@@ -462,14 +456,14 @@ function removeEntity(object) {
                     scene.add(scaledCurrentlyBeingPlayed);
                     
                     count++; 
-                    var scaledPositionVector = scaledCurrentlyBeingPlayed.geometry.vertices[count].clone();
-                    scaledPositionVector.applyMatrix4(scaledCurrentlyBeingPlayed.matrixWorld );
-                    console.log("startNow!");      
-                    console.log(scaledPositionVector);          
+                    
+
+                    var camPosToTween = cameraPos();
+                    var camTargetToTween = cameraLookAtPos();     
                     var tweenf = new TWEEN.Tween(activeCamera.position).to({
-                            x:scaledPositionVector.x,
-                            y:scaledPositionVector.y,
-                            z:scaledPositionVector.z
+                            x:camPosToTween.x,
+                            y:camPosToTween.y,
+                            z:camPosToTween.z
                         },3000)
                         .easing(TWEEN.Easing.Cubic.InOut)
                         .onComplete(function() {
@@ -486,6 +480,15 @@ function removeEntity(object) {
                             stopSetInterval = setInterval(function(){ moveColor()}, 10);
                         });
                         
+
+                        var tweenTarget = new TWEEN.Tween(activeCamera.target).to({
+                            x:camTargetToTween.x,
+                            y:camTargetToTween.y,
+                            z:camTargetToTween.z
+                        },2500)
+                        .easing(TWEEN.Easing.Cubic.InOut);
+
+                        tweenTarget.start(); 
                         tweenf.start();
                         
                         
