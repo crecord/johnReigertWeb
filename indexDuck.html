@@ -334,51 +334,59 @@ function removeEntity(object) {
         
         } 
         
+        function cameraPos(){
+            // find the position to place the camera 
+            var scaledPositionVector = scaledCurrentlyBeingPlayed.geometry.vertices[count].clone();
+            scaledPositionVector.applyMatrix4(scaledCurrentlyBeingPlayed.matrixWorld );
+            return scaledPositionVector; 
+        }
+
+        function cameraLookAtPos(){
+            // find the position to look at
+            var lookAtPos = currentlyBeingPlayed.geometry.vertices[count].clone();
+            lookAtPos.applyMatrix4( currentlyBeingPlayed.matrixWorld );
+            return lookAtPos; 
+        }
+
+
         function moveColor(){
         if (count< currentlyBeingPlayed.geometry.colors.length - 1){
+
+                        //change the color at the playhead
                         currentlyBeingPlayed.geometry.colors[count].setRGB(0,238,207);
                         currentlyBeingPlayed.geometry.colorsNeedUpdate = true; 
                         count++;
                         
-                        //new THREE.Vector3(
+                        camPos = cameraPos(); 
                         
-                        var scaledPositionVector = scaledCurrentlyBeingPlayed.geometry.vertices[count].clone();
-                        scaledPositionVector.applyMatrix4(scaledCurrentlyBeingPlayed.matrixWorld );
+                        // set the camera at that position 
+                        cameraFollow.position.x = camPos.x  ;
+                        cameraFollow.position.y = camPos.y ;
+                        cameraFollow.position.z = camPos.z ;
                         
-                        cameraFollow.position.x = scaledPositionVector.x  ;
-                        cameraFollow.position.y = scaledPositionVector.y ;
-                        cameraFollow.position.z = scaledPositionVector.z ;
+                        var posToLookAt = cameraLookAtPos; 
                         
-                        var scaledVector = currentlyBeingPlayed.geometry.vertices[count].clone();
-                        
-                        scaledVector.applyMatrix4( currentlyBeingPlayed.matrixWorld );
-                        
+
+                        /*
                         var scaledVectorBehind = scaledVector;
-                        
                         if(count > 19){
                             scaledVectorBehind = currentlyBeingPlayed.geometry.vertices[count - 20 ].clone();
                             scaledVectorBehind.applyMatrix4( currentlyBeingPlayed.matrixWorld );
                         }
+                        */
                         
+                        //set the look at position
+                        cameraFollow.lookAt(posToLookAt);
                         
+                        spherePlayHead.position.y = posToLookAt.y; 
+                        spherePlayHead.position.z = posToLookAt.z; 
+                        spherePlayHead.position.x = posToLookAt.x; 
                         
-                        
-                        cameraFollow.lookAt(scaledVector);
-                        
-                        spherePlayHead.position.y = scaledVector.y; 
-                        spherePlayHead.position.z = scaledVector.z; 
-                        spherePlayHead.position.x = scaledVector.x; 
-                        
-                        //cameraRig.lookAt(scaledVector.x, scaledVector.y, scaledVector.z);
-                        //cameraRig.lookAt(scaledVector);
-                        //cameraRig.lookAt(currentlyBeingPlayed.geometry.vertices[count + 20]);
                         cameraFollow.updateProjectionMatrix();
 
                         cameraFollowHelper.update();
                         //cameraFollowHelper.visible = true;
-                        //console.log(cameraFollow);
-                        //camera.lookAt(camera.scenePosition);
-                        //camera.lookAt(scene.position);
+
                     }
                     else{
                         isCameraMove = true; 
