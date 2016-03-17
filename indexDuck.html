@@ -51,7 +51,6 @@
   </audio>
 
     <script src="three.min.js"></script>
-
     <script src="hilbert3D.js"></script>
     <script src="Tween.js"></script>
     <script src="RequestAnimationFrame.js"></script>
@@ -94,7 +93,7 @@
 
         function init(myArr) {
                 // PLY file
-                console.log("LLL");
+                console.log("PPP");
                 var loader = new THREE.PLYLoader();
                 loader.load( 'duck3.ply', function ( geometry ) {
                     geometry.computeFaceNormals();
@@ -351,27 +350,31 @@ function removeEntity(object) {
         if (count< currentlyBeingPlayed.geometry.colors.length - 1){
                         currentlyBeingPlayed.geometry.colors[count].setRGB(0,238,207);
                         currentlyBeingPlayed.geometry.colorsNeedUpdate = true; 
-                        count++;
+                        
                         
                         
                          var camPos = cameraPos();
-                        cameraFollow.position.x = camPos.x  ;
-                        cameraFollow.position.y = camPos.y ;
-                        cameraFollow.position.z = camPos.z ;
+                         console.log("cam pos arrive");
+                         console.log(camPos);
+                        activeCamera.position.x = camPos.x  ;
+                        activeCamera.position.y = camPos.y ;
+                        activeCamera.position.z = camPos.z ;
                         
                         
                         
                         var camLookAt = cameraLookAtPos(); 
                         
-                        cameraFollow.lookAt(camLookAt);
-                        
+                        activeCamera.lookAt(camLookAt);
+                        console.log("cam targer");
+                         console.log(camLookAt);
                         spherePlayHead.position.y = camLookAt.y; 
                         spherePlayHead.position.z = camLookAt.z; 
                         spherePlayHead.position.x = camLookAt.x; 
 
-                        cameraFollow.updateProjectionMatrix();
+                        activeCamera.updateProjectionMatrix();
 
                         cameraFollowHelper.update();
+                        count++; 
 
                     }
                     else{
@@ -386,7 +389,7 @@ function removeEntity(object) {
                         clearInterval(stopSetInterval); 
                         // this is the moment to animate the camera
                         
-                    
+                        count++;
                         var tween = new TWEEN.Tween(activeCamera.position).to({
                             x:0,
                             y:0,
@@ -456,38 +459,53 @@ function removeEntity(object) {
                     scene.add(scaledCurrentlyBeingPlayed);
                     
                     count++; 
-                    
+                    count++; 
 
-                    var camPosToTween = cameraPos();
-                    var camTargetToTween = cameraLookAtPos();     
+
+                    activeCamera.updateProjectionMatrix();
+                    var camPosToTween = scaledCurrentlyBeingPlayed.geometry.vertices[count].clone();
+                    camPosToTween.applyMatrix4(scaledCurrentlyBeingPlayed.matrixWorld );
+            
+                    
+                    var camTargetToTween = cameraLookAtPos();  
+                    console.log("target postion");
+                    console.log(camPosToTween);
+                    console.log("target target");
+                    console.log(camTargetToTween);
+
+                    var camTarget = new THREE.Vector3(0,0,0); 
+
                     var tweenf = new TWEEN.Tween(activeCamera.position).to({
-                            x:camPosToTween.x,
-                            y:camPosToTween.y,
-                            z:camPosToTween.z
+                            x:109.04193880346547,
+                            y:476.92741257917396,
+                            z:226.6090000702086
                         },3000)
                         .easing(TWEEN.Easing.Cubic.InOut)
                         .onComplete(function() {
+                            //activeCamera.lookAt(camTarget);
                             console.log("yo!");
                             scene.add(spherePlayHead);
-                            activeCamera = cameraFollow;  
-                            cameraFollowHelper.visible = false;
+                            //activeCamera = cameraFollow;  
+                            cameraFollowHelper.visible = true;
                             var rand = getRandomInt(0,3);
-                            console.log(rand); 
                             currentAudio = allAudio[rand]; 
-                            console.log(currentAudio); 
                             currentAudio.play();
 
                             stopSetInterval = setInterval(function(){ moveColor()}, 10);
                         });
                         
 
-                        var tweenTarget = new TWEEN.Tween(activeCamera.target).to({
+                        var tweenTarget = new TWEEN.Tween(camTarget).to({
                             x:camTargetToTween.x,
                             y:camTargetToTween.y,
                             z:camTargetToTween.z
                         },2500)
-                        .easing(TWEEN.Easing.Cubic.InOut);
+                        .easing(TWEEN.Easing.Cubic.InOut).onUpdate(function(){
+                            console.log("woot");
+                            activeCamera.lookAt(camTarget); 
+                        });
 
+                        console.log(activeCamera);
                         tweenTarget.start();  
                         tweenf.start();
                         
