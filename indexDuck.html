@@ -332,6 +332,20 @@ function removeEntity(object) {
         function fadeColorHelper(){
         
         } 
+
+        function cameraPos(){
+            // find the position to place the camera 
+            var scaledPositionVector = scaledCurrentlyBeingPlayed.geometry.vertices[count].clone();
+            scaledPositionVector.applyMatrix4(scaledCurrentlyBeingPlayed.matrixWorld );
+            return scaledPositionVector; 
+        }
+
+        function cameraLookAtPos(){
+            // find the position to look at
+            var lookAtPos = currentlyBeingPlayed.geometry.vertices[count].clone();
+            lookAtPos.applyMatrix4( currentlyBeingPlayed.matrixWorld );
+            return lookAtPos; 
+        }
         
         function moveColor(){
         if (count< currentlyBeingPlayed.geometry.colors.length - 1){
@@ -340,13 +354,14 @@ function removeEntity(object) {
                         count++;
                         
                         //new THREE.Vector3(
-                        
+                        /*
                         var scaledPositionVector = scaledCurrentlyBeingPlayed.geometry.vertices[count].clone();
                         scaledPositionVector.applyMatrix4(scaledCurrentlyBeingPlayed.matrixWorld );
-                        
-                        cameraFollow.position.x = scaledPositionVector.x  ;
-                        cameraFollow.position.y = scaledPositionVector.y ;
-                        cameraFollow.position.z = scaledPositionVector.z ;
+                        */ 
+                         var camPos = cameraPos();
+                        cameraFollow.position.x = camPos.x  ;
+                        cameraFollow.position.y = camPos.y ;
+                        cameraFollow.position.z = camPos.z ;
                         
                         var scaledVector = currentlyBeingPlayed.geometry.vertices[count].clone();
                         
