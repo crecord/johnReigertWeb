@@ -38,15 +38,15 @@
 <body>
 
     <p id= "hoverText" style="display:none; padding:20%; padding:20%; position:absolute; font-family:'Courier New', Courier, monospace"> hello, here is some text </p> 
-    <audio style= "display:none;" id="myAudio1" src = "Sand.wav" controls loop>
+    <audio style= "display:none;" id="Sand.wav" src = "Sand.wav" controls loop>
     <a href = "Sand.wav">DoYou.ogg</a>
   </audio>
   
-  <audio style= "display:none;" id="myAudio2" src = "Skin.wav" controls loop>
+  <audio style= "display:none;" id="Skin.wav" src = "Skin.wav" controls loop>
     <a href = "Skin.wav">DoYou.ogg</a>
   </audio>
   
-  <audio style= "display:none;" id="myAudio3" src = "whisper.wav" controls loop>
+  <audio style= "display:none;" id="whisper.wav" src = "whisper.wav" controls loop>
     <a href = "whisper.wav">DoYou.ogg</a>
   </audio>
 
@@ -62,7 +62,9 @@
 
     <script>
         var xmlhttp = new XMLHttpRequest();
+        var xmlhttpTwo = new XMLHttpRequest();
         var url = "duck.json";
+        var names = "names.json";
         
         var mouseX = 0,
             mouseY = 0,
@@ -72,12 +74,12 @@
             camera, cameraFollow,cameraFollowHelper, activeCamera, scene, renderer, material, raycaster, currentIntersected,
             arrayOfAllLines, count, currentlyBeingPlayed, scaledCurrentlyBeingPlayed, stopSetInterval, spherePlayHead, currentAudio;
 
-        var allAudio = []; 
+        //var allAudio = []; 
         var mouse = new THREE.Vector2();
         arrayOfAllLines = [];
         var isCameraMove; 
         var isLineFollowing; 
-        
+        var curName, curAudio, curDur, isUpdatedCur; 
         var paths;
         xmlhttp.onreadystatechange = function() {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -86,8 +88,17 @@
                 animate();
             }
         }
+
+        var glossary;
+        xmlhttpTwo.onreadystatechange = function() {
+            if (xmlhttpTwo.readyState == 4 && xmlhttpTwo.status == 200) {
+                glossary = JSON.parse(xmlhttpTwo.responseText);
+            }
+        }
         xmlhttp.open("GET", url, true);
+        xmlhttpTwo.open("GET", names, true);
         xmlhttp.send();
+        xmlhttpTwo.send();
         if (!Detector.webgl) Detector.addGetWebGLMessage();
    
         
@@ -95,7 +106,6 @@
             scene = new THREE.Scene();
 
             // PLY file
-            console.log("LLL");
             var loader = new THREE.PLYLoader();
             loader.load( 'duck3.ply', function ( geometry ) {
                 geometry.computeFaceNormals();
@@ -112,12 +122,12 @@
             // Lights
 
             //scene.add( new THREE.HemisphereLight( 0x443333, 0x111122 ) );
-                
+                /*
             for (var i = 0; i<3; i++){
                 var string =  "myAudio" + (i+1);
                 var audio = document.getElementById(string);
                 allAudio.push(audio); 
-            }
+            */
             
             spherePlayHead = new THREE.Mesh( new THREE.SphereGeometry( 2, 16, 8 ), new THREE.MeshBasicMaterial( { color: 0x00eecf} ) );
             spherePlayHead.name = "spherePlayHead";
@@ -168,7 +178,6 @@
             material = new THREE.MeshDepthMaterial( { overdraw: 0.5 } );
 
             parentTransform = new THREE.Object3D();
-            console.log(paths); 
             for (var j = 1; j < paths.scribbles.length; j++) {
                 var points = [];
                 var rawArrayofPoints = paths.scribbles[j].line;
@@ -228,7 +237,6 @@
 
                 ];
 
-                console.log("param: " + parameters.length);
                 for (i = 0; i < parameters.length; ++i) {
 
                     p = parameters[i];
@@ -316,7 +324,6 @@
             if (event.touches.length == 1) {
 
                 event.preventDefault();
-                console.log("Clicked?");
                 mouseX = event.touches[0].pageX - windowHalfX;
                 mouseY = event.touches[0].pageY - windowHalfY;
             }
@@ -353,8 +360,7 @@
             currentlyBeingPlayed.geometry.colorsNeedUpdate = true; 
             
             var camPos = cameraPos();
-            console.log("cam pos arrive");
-            console.log(camPos);
+
             activeCamera.position.x = camPos.x  ;
             activeCamera.position.y = camPos.y ;
             activeCamera.position.z = camPos.z ;
@@ -364,8 +370,7 @@
             var camLookAt = cameraLookAtPos(); 
             
             activeCamera.lookAt(camLookAt);
-            console.log("cam targer");
-             console.log(camLookAt);
+
             spherePlayHead.position.y = camLookAt.y; 
             spherePlayHead.position.z = camLookAt.z; 
             spherePlayHead.position.x = camLookAt.x; 
@@ -418,7 +423,6 @@
 
 
         function zoomOut(){
-            console.log("boop!"); 
            
             isCameraMove = true; 
             currentAudio.pause();
@@ -440,10 +444,10 @@
         }
                         
         function triggerFollow(){
-            console.log("start");
             xA = [];
             yA = [];
             zA = [];
+            indexA = [];
 
             xS = [];
             yS = [];
@@ -451,7 +455,6 @@
 
 
 
-            console.log(scaledCurrentlyBeingPlayed.geometry.vertices.length); 
             for(var i=0; i < scaledCurrentlyBeingPlayed.geometry.vertices.length; i+=50 ){
                 //var thePoint = scaledCurrentlyBeingPlayed.geometry.vertices[i];
                 var thePoint = currentlyBeingPlayed.geometry.vertices[i].clone();
@@ -459,11 +462,9 @@
                 xA.push(thePoint.x); 
                 yA.push(thePoint.y); 
                 zA.push(thePoint.z); 
+                indexA.push(i);
             }
-            console.log("filled"); 
-            console.log(xA.length); 
-            
-            console.log(scaledCurrentlyBeingPlayed.geometry.vertices.length); 
+
             for(var i=0; i < scaledCurrentlyBeingPlayed.geometry.vertices.length; i+=50 ){
                 //var thePoint = scaledCurrentlyBeingPlayed.geometry.vertices[i];
                 var thePoint = scaledCurrentlyBeingPlayed.geometry.vertices[i].clone();
@@ -473,25 +474,38 @@
                 zS.push(thePoint.z); 
             }
 
-            var obj = { x: xA[0], y: yA[0], z: zA[0] };
-            var tweenPath = new TWEEN.Tween( obj ).to( { x: xA, y: yA, z: zA}, 10000 ).onUpdate( function() {
-                console.log("hi!");
-                console.log(this.y);
+
+            var dur = 10000;
+            if (isUpdatedCur){
+                dur = curDur; 
+            }
+            var lastIndex = -1; 
+            var obj = { x: xA[0], y: yA[0], z: zA[0], idx: indexA[0] };
+            var tweenPath = new TWEEN.Tween( obj ).to( { x: xA, y: yA, z: zA, idx: indexA}, dur ).onUpdate( function() {
                 spherePlayHead.position.y = this.y; 
                 spherePlayHead.position.z = this.z; 
                 spherePlayHead.position.x = this.x; 
                 activeCamera.lookAt(new THREE.Vector3( this.x, this.y ,this.z ));
+                var curIdx = Math.round(this.idx); 
+                if(curIdx != lastIndex){
+                    if ((curIdx< currentlyBeingPlayed.geometry.colors.length - 1) & (lastIndex > -1) ){
+                        // fill in all the colors between the current one and the last index
+                        for (var i=lastIndex; i < curIdx; i++){
+                            currentlyBeingPlayed.geometry.colors[i].setRGB(0,238,207);
+                        }
+                        currentlyBeingPlayed.geometry.colorsNeedUpdate = true; 
+                    }
+                    lastIndex = curIdx; 
+                }
 
 
             }).interpolation( TWEEN.Interpolation.CatmullRom ).easing(TWEEN.Easing.Quadratic.InOut )
             .onComplete(function(){
-                console.log("complete"); 
             });
             
 
             var camPathObj = { x: xS[0], y: yS[0], z: zS[0] };
-            var tweenCamPath = new TWEEN.Tween( camPathObj ).to( { x: xS, y: yS, z: zS}, 10000 ).onUpdate( function() {
-                console.log("woot");
+            var tweenCamPath = new TWEEN.Tween( camPathObj ).to( { x: xS, y: yS, z: zS}, dur ).onUpdate( function() {
                 activeCamera.position.x = this.x;
                 activeCamera.position.y = this.y;
                 activeCamera.position.z = this.z;
@@ -502,10 +516,9 @@
                 x:0,
                 y:0,
                 z:1000
-            },3000)
+            },5000)
             .onStart(function(){
                 
-                console.log("ping");
                 tweenCamRot.start();
             }
             )
@@ -520,10 +533,9 @@
                 x: 0,
                 y: 0,
                 z: 0
-            },3000)
+            },5000)
             .easing(TWEEN.Easing.Cubic.InOut)
             .onStart(function(){
-                console.log("rot"); 
                 isCameraMove = true; 
                 currentAudio.pause();
                 spherePlayHead.visible=false; 
@@ -532,15 +544,13 @@
                 cameraFollowHelper.visible = false;
                 count = 0; 
                 currentlyBeingPlayed = undefined;
-                count++;
-                
-              
+                count++;              
             });
 
             tweenPath.chain(tweenCamPos); 
             //tweenPath.chain(tweenCamRot); 
             tweenPath.start(); 
-            tweenCamPath.start(); 
+            //tweenCamPath.start(); 
 
 
         }       
@@ -549,9 +559,7 @@
         function onDocumentMouseUp(event) {
         console.log("clickzz");
             if ( currentIntersected !== undefined ) {
-                console.log("click");
                 //currentIntersected.material.color = 0x0099FF;
-                console.log(currentIntersected);
                 //console.log(currentIntersected.geometry.colors);
                 //currentlyBeingPlayed, stopSetInterval
                 
@@ -568,7 +576,6 @@
                     isCameraMove = false; 
                     
                     currentlyBeingPlayed = currentIntersected;
-                    console.log(currentlyBeingPlayed.scale);
                     
                     scaledCurrentlyBeingPlayed = currentlyBeingPlayed.clone();                  
                     scaledCurrentlyBeingPlayed.scale.x = 10; 
@@ -577,7 +584,6 @@
                     scaledCurrentlyBeingPlayed.rotation.x = -1.5;
                     scaledCurrentlyBeingPlayed.rotation.z = -.5;
                     
-                    console.log(scaledCurrentlyBeingPlayed);
                     scaledCurrentlyBeingPlayed.visible=false;
                     //scene.add(scaledCurrentlyBeingPlayed);
                     
@@ -591,10 +597,7 @@
             
                     
                     var camTargetToTween = cameraLookAtPos();  
-                    console.log("target postion");
-                    console.log(camPosToTween);
-                    console.log("target target");
-                    console.log(camTargetToTween);
+
 
                     var camTarget = new THREE.Vector3(0,0,0); 
 
@@ -606,13 +609,18 @@
                         .easing(TWEEN.Easing.Cubic.InOut)
                         .onComplete(function() {
                             //activeCamera.lookAt(camTarget);
-                            console.log("yo!");
                             //scene.add(spherePlayHead);
                             spherePlayHead.visible = true; 
                             //activeCamera = cameraFollow;  
                             cameraFollowHelper.visible = true;
                             var rand = getRandomInt(0,3);
-                            currentAudio = allAudio[rand]; 
+                            //currentAudio = allAudio[rand]; 
+                            if (isUpdatedCur){
+                                currentAudio = document.getElementById(curAudio);
+                            }
+                            else{
+                                currentAudio = document.getElementById("whisper.wav");
+                            }
                             currentAudio.play();
 
                             //stopSetInterval = setInterval(function(){ moveColor()}, 10);
@@ -626,11 +634,9 @@
                             z:camTargetToTween.z
                         },2500)
                         .easing(TWEEN.Easing.Cubic.InOut).onUpdate(function(){
-                            console.log("woot");
                             activeCamera.lookAt(camTarget); 
                         });
 
-                        console.log(activeCamera);
                         tweenTarget.start();  
                         tweenf.start();
                         
@@ -705,8 +711,25 @@
             var hoverTxt = document.getElementById("hoverText"); 
             if(currentIntersected !== undefined ){
                 hoverTxt.style.display = "block"; 
-                hoverTxt.innerHTML = currentIntersected.id; 
-                console.log(currentIntersected.id);
+                
+
+                isUpdatedCur = false; 
+                for (var i = 0; i < glossary.files.length; i++) {
+                    if(glossary.files[i].index == currentIntersected.id){
+                        isUpdatedCur = true; 
+                        curName = glossary.files[i].name;
+                        hoverTxt.innerHTML = curName;
+                        curAudio = glossary.files[i].audio;
+                        curDur = glossary.files[i].duration;
+                        break; 
+                    }
+
+                }
+                if (!isUpdatedCur){
+                    hoverTxt.innerHTML = currentIntersected.id; 
+                }
+
+
             }
             else{
                 hoverTxt.style.display = "none"; 
@@ -722,6 +745,8 @@
         function getRandomInt(min, max) {
             return Math.floor(Math.random() * (max - min)) + min;
         }
+
+
 
     </script>
 </body>
