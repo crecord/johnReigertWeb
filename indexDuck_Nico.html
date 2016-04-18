@@ -59,6 +59,7 @@
     <script src="PLYLoader.js"></script>
     <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
     <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="ColladaLoader.js"></script>
 
     <script>
         var xmlhttp = new XMLHttpRequest();
@@ -105,6 +106,7 @@
         function init() {
             scene = new THREE.Scene();
 
+            /*
             // PLY file
             var loader = new THREE.PLYLoader();
             loader.load( 'duck3.ply', function ( geometry ) {
@@ -118,6 +120,18 @@
                 mesh.rotation.z = -0.5
                 scene.add( mesh );
             });
+            */
+
+
+            var loader = new THREE.ColladaLoader();
+            loader.options.convertUpAxis = true;
+            loader.load( 'redHeadDuck.dae', function ( collada ) {
+                dae = collada.scene.children[0];
+                dae.scale.x = dae.scale.y = dae.scale.z =  1000;
+                dae.updateMatrix();
+                scene.add(dae);
+            } );
+
 
             // Lights
 
@@ -577,15 +591,58 @@
                     
                     currentlyBeingPlayed = currentIntersected;
                     
-                    scaledCurrentlyBeingPlayed = currentlyBeingPlayed.clone();                  
+                    scaledCurrentlyBeingPlayed = currentlyBeingPlayed.clone();     
+
+                    // where is the center
+                   //var cent =  scaledCurrentlyBeingPlayed.geometry.boundingSphere.center;
+
+                   scaledCurrentlyBeingPlayed.scale.x = 4.5; 
+                    scaledCurrentlyBeingPlayed.scale.y = 4.5; 
+                    scaledCurrentlyBeingPlayed.scale.z = 4.5; 
+                    scaledCurrentlyBeingPlayed.rotation.x = -1.5;
+                    scaledCurrentlyBeingPlayed.rotation.z = -.5;
+                    scaledCurrentlyBeingPlayed.updateMatrixWorld(); 
+
+                    scaledCurrentlyBeingPlayed.geometry.computeBoundingBox();
+
+                    var center = new THREE.Vector3( 0, 0, 0 );
+                    console.log(center);
+                    center.x = ((scaledCurrentlyBeingPlayed.geometry.boundingBox.max.x -scaledCurrentlyBeingPlayed.geometry.boundingBox.min.x)/2) + scaledCurrentlyBeingPlayed.geometry.boundingBox.min.x; 
+                    center.y = ((scaledCurrentlyBeingPlayed.geometry.boundingBox.max.y -scaledCurrentlyBeingPlayed.geometry.boundingBox.min.y)/2) + scaledCurrentlyBeingPlayed.geometry.boundingBox.min.y; 
+                    center.z = ((scaledCurrentlyBeingPlayed.geometry.boundingBox.max.z -scaledCurrentlyBeingPlayed.geometry.boundingBox.min.z)/2) + scaledCurrentlyBeingPlayed.geometry.boundingBox.min.z; 
+                    console.log(center);
+                    center.applyMatrix4( scaledCurrentlyBeingPlayed.matrixWorld );
+                    //center.addVectors(scaledCurrentlyBeingPlayed.geometry.boundingBox.min, scaledCurrentlyBeingPlayed.geometry.boundingBox.max);
+                    //center.divideScalar(2);
+                    console.log("hello");
+                    console.log(scaledCurrentlyBeingPlayed);
+                    /*
+                    var centerX = 0.5 * ( scaledCurrentlyBeingPlayed.geometry.boundingBox.x[ 1 ] - scaledCurrentlyBeingPlayed.geometry.boundingBox.x[ 0 ] );
+                    var centerY = 0.5 * ( scaledCurrentlyBeingPlayed.geometry.boundingBox.y[ 1 ] - scaledCurrentlyBeingPlayed.geometry.boundingBox.y[ 0 ] );
+                    var centerZ = 0.5 * ( scaledCurrentlyBeingPlayed.geometry.boundingBox.z[ 1 ] - scaledCurrentlyBeingPlayed.geometry.boundingBox.z[ 0 ] );
+                    */
+
+
+                    var centS = new THREE.Mesh( new THREE.SphereGeometry(2, 16, 8), new THREE.MeshBasicMaterial( { color: 0x00eecf} ) );
+                    centS.position.x = center.x;
+                    centS.position.y = center.y;
+                    centS.position.z = center.z;
+                    scene.add(centS);
+                    
+                    // translate origin 
+                    //scaledCurrentlyBeingPlayed.geometry.translate(center);
+                    // scale from there
+                    scaledCurrentlyBeingPlayed.geometry.applyMatrix( new THREE.Matrix4().makeTranslation(center) );
+                    scaledCurrentlyBeingPlayed.updateMatrixWorld();
+                    /*
                     scaledCurrentlyBeingPlayed.scale.x = 10; 
                     scaledCurrentlyBeingPlayed.scale.y = 10; 
                     scaledCurrentlyBeingPlayed.scale.z = 10; 
                     scaledCurrentlyBeingPlayed.rotation.x = -1.5;
                     scaledCurrentlyBeingPlayed.rotation.z = -.5;
-                    
-                    scaledCurrentlyBeingPlayed.visible=false;
-                    //scene.add(scaledCurrentlyBeingPlayed);
+                    */
+                    scaledCurrentlyBeingPlayed.visible=true;
+                    scene.add(scaledCurrentlyBeingPlayed);
                     
                     count++; 
                     count++; 
