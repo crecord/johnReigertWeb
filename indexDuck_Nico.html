@@ -50,13 +50,12 @@
     <a href = "whisper.wav">DoYou.ogg</a>
   </audio>
 
-    <script src="three.min.js"></script>
+    <script src="three.js"></script>
     <script src="hilbert3D.js"></script>
     <script src="Tween.js"></script>
     <script src="RequestAnimationFrame.js"></script>
     <script src="Detector.js"></script>
     <script src="stats.min.js"></script>
-    <script src="PLYLoader.js"></script>
     <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
     <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
     <script src="ColladaLoader.js"></script>
@@ -106,22 +105,6 @@
         function init() {
             scene = new THREE.Scene();
 
-            /*
-            // PLY file
-            var loader = new THREE.PLYLoader();
-            loader.load( 'duck3.ply', function ( geometry ) {
-                geometry.computeFaceNormals();
-                var material = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x111111, shininess: 200, vertexColors: THREE.VertexColors} );
-                //var material = new THREE.MeshStandardMaterial( {color: 0x0055ff, specular: 0x111111, shininess: 200 } );
-                var mesh = new THREE.Mesh( geometry, material );
-                mesh.scale.multiplyScalar( 4.46 );
-                mesh.position.y = -1.16;
-                mesh.rotation.x = -1.5;
-                mesh.rotation.z = -0.5
-                scene.add( mesh );
-            });
-            */
-
 
             var loader = new THREE.ColladaLoader();
             loader.options.convertUpAxis = true;
@@ -131,17 +114,6 @@
                 dae.updateMatrix();
                 scene.add(dae);
             } );
-
-
-            // Lights
-
-            //scene.add( new THREE.HemisphereLight( 0x443333, 0x111122 ) );
-                /*
-            for (var i = 0; i<3; i++){
-                var string =  "myAudio" + (i+1);
-                var audio = document.getElementById(string);
-                allAudio.push(audio); 
-            */
             
             spherePlayHead = new THREE.Mesh( new THREE.SphereGeometry( 2, 16, 8 ), new THREE.MeshBasicMaterial( { color: 0x00eecf} ) );
             spherePlayHead.name = "spherePlayHead";
@@ -281,9 +253,9 @@
             document.addEventListener('touchstart', onDocumentTouchStart, false);
             document.addEventListener('touchmove', onDocumentTouchMove, false);
             document.addEventListener('mouseup', onDocumentMouseUp, false);
-            //
 
             window.addEventListener('resize', onWindowResize, false);
+           
         }
         
 
@@ -295,7 +267,7 @@
 
 
         function onWindowResize() {
-
+        
             windowHalfX = window.innerWidth / 2;
             windowHalfY = window.innerHeight / 2;
 
@@ -310,6 +282,7 @@
                         
             
             renderer.setSize(window.innerWidth, window.innerHeight);
+          
 
         }
 
@@ -467,8 +440,15 @@
             yS = [];
             zS = [];
 
+            currentlyBeingPlayed.geometry.computeBoundingBox();
+            // find the center of it again
+              var center = new THREE.Vector3();
+                    center.x = ((currentlyBeingPlayed.geometry.boundingBox.max.x -currentlyBeingPlayed.geometry.boundingBox.min.x)/2) + currentlyBeingPlayed.geometry.boundingBox.min.x; 
+                    center.y = ((currentlyBeingPlayed.geometry.boundingBox.max.y -currentlyBeingPlayed.geometry.boundingBox.min.y)/2) + currentlyBeingPlayed.geometry.boundingBox.min.y; 
+                    center.z = ((currentlyBeingPlayed.geometry.boundingBox.max.z -currentlyBeingPlayed.geometry.boundingBox.min.z)/2) + currentlyBeingPlayed.geometry.boundingBox.min.z; 
+                    center.applyMatrix4( currentlyBeingPlayed.matrixWorld );
 
-
+                   
             for(var i=0; i < scaledCurrentlyBeingPlayed.geometry.vertices.length; i+=50 ){
                 //var thePoint = scaledCurrentlyBeingPlayed.geometry.vertices[i];
                 var thePoint = currentlyBeingPlayed.geometry.vertices[i].clone();
@@ -477,8 +457,22 @@
                 yA.push(thePoint.y); 
                 zA.push(thePoint.z); 
                 indexA.push(i);
+
+                var difference= new THREE.Vector3();
+
+                difference.subVectors(thePoint, center);
+
+                difference.multiplyScalar(1);
+
+                difference.add(thePoint); 
+    
+                xS.push(difference.x); 
+                yS.push(difference.y); 
+                zS.push(difference.z); 
+
             }
 
+            /*
             for(var i=0; i < scaledCurrentlyBeingPlayed.geometry.vertices.length; i+=50 ){
                 //var thePoint = scaledCurrentlyBeingPlayed.geometry.vertices[i];
                 var thePoint = scaledCurrentlyBeingPlayed.geometry.vertices[i].clone();
@@ -487,6 +481,7 @@
                 yS.push(thePoint.y); 
                 zS.push(thePoint.z); 
             }
+            */
 
 
             var dur = 10000;
@@ -513,12 +508,17 @@
                 }
 
 
-            }).interpolation( TWEEN.Interpolation.CatmullRom ).easing(TWEEN.Easing.Quadratic.InOut )
+            }).onStart(function(){
+                
+                tweenCamPath.start();
+            }
+            ).interpolation( TWEEN.Interpolation.CatmullRom ).easing(TWEEN.Easing.Quadratic.InOut )
             .onComplete(function(){
             });
             
 
             var camPathObj = { x: xS[0], y: yS[0], z: zS[0] };
+
             var tweenCamPath = new TWEEN.Tween( camPathObj ).to( { x: xS, y: yS, z: zS}, dur ).onUpdate( function() {
                 activeCamera.position.x = this.x;
                 activeCamera.position.y = this.y;
@@ -593,54 +593,14 @@
                     
                     scaledCurrentlyBeingPlayed = currentlyBeingPlayed.clone();     
 
-                    // where is the center
-                   //var cent =  scaledCurrentlyBeingPlayed.geometry.boundingSphere.center;
-
-                   scaledCurrentlyBeingPlayed.scale.x = 4.5; 
-                    scaledCurrentlyBeingPlayed.scale.y = 4.5; 
-                    scaledCurrentlyBeingPlayed.scale.z = 4.5; 
-                    scaledCurrentlyBeingPlayed.rotation.x = -1.5;
-                    scaledCurrentlyBeingPlayed.rotation.z = -.5;
-                    scaledCurrentlyBeingPlayed.updateMatrixWorld(); 
-
-                    scaledCurrentlyBeingPlayed.geometry.computeBoundingBox();
-
-                    var center = new THREE.Vector3( 0, 0, 0 );
-                    console.log(center);
-                    center.x = ((scaledCurrentlyBeingPlayed.geometry.boundingBox.max.x -scaledCurrentlyBeingPlayed.geometry.boundingBox.min.x)/2) + scaledCurrentlyBeingPlayed.geometry.boundingBox.min.x; 
-                    center.y = ((scaledCurrentlyBeingPlayed.geometry.boundingBox.max.y -scaledCurrentlyBeingPlayed.geometry.boundingBox.min.y)/2) + scaledCurrentlyBeingPlayed.geometry.boundingBox.min.y; 
-                    center.z = ((scaledCurrentlyBeingPlayed.geometry.boundingBox.max.z -scaledCurrentlyBeingPlayed.geometry.boundingBox.min.z)/2) + scaledCurrentlyBeingPlayed.geometry.boundingBox.min.z; 
-                    console.log(center);
-                    center.applyMatrix4( scaledCurrentlyBeingPlayed.matrixWorld );
-                    //center.addVectors(scaledCurrentlyBeingPlayed.geometry.boundingBox.min, scaledCurrentlyBeingPlayed.geometry.boundingBox.max);
-                    //center.divideScalar(2);
-                    console.log("hello");
-                    console.log(scaledCurrentlyBeingPlayed);
-                    /*
-                    var centerX = 0.5 * ( scaledCurrentlyBeingPlayed.geometry.boundingBox.x[ 1 ] - scaledCurrentlyBeingPlayed.geometry.boundingBox.x[ 0 ] );
-                    var centerY = 0.5 * ( scaledCurrentlyBeingPlayed.geometry.boundingBox.y[ 1 ] - scaledCurrentlyBeingPlayed.geometry.boundingBox.y[ 0 ] );
-                    var centerZ = 0.5 * ( scaledCurrentlyBeingPlayed.geometry.boundingBox.z[ 1 ] - scaledCurrentlyBeingPlayed.geometry.boundingBox.z[ 0 ] );
-                    */
-
-
-                    var centS = new THREE.Mesh( new THREE.SphereGeometry(2, 16, 8), new THREE.MeshBasicMaterial( { color: 0x00eecf} ) );
-                    centS.position.x = center.x;
-                    centS.position.y = center.y;
-                    centS.position.z = center.z;
-                    scene.add(centS);
-                    
-                    // translate origin 
-                    //scaledCurrentlyBeingPlayed.geometry.translate(center);
-                    // scale from there
-                    scaledCurrentlyBeingPlayed.geometry.applyMatrix( new THREE.Matrix4().makeTranslation(center) );
                     scaledCurrentlyBeingPlayed.updateMatrixWorld();
-                    /*
+                   
                     scaledCurrentlyBeingPlayed.scale.x = 10; 
                     scaledCurrentlyBeingPlayed.scale.y = 10; 
                     scaledCurrentlyBeingPlayed.scale.z = 10; 
                     scaledCurrentlyBeingPlayed.rotation.x = -1.5;
                     scaledCurrentlyBeingPlayed.rotation.z = -.5;
-                    */
+                    
                     scaledCurrentlyBeingPlayed.visible=true;
                     scene.add(scaledCurrentlyBeingPlayed);
                     
@@ -720,7 +680,7 @@
         }
 
         function render() {
-
+       
         if(isCameraMove){
            camera.position.x += (mouseX - camera.position.x) * .05;
            camera.position.y += (-mouseY + 200 - camera.position.y) * .05;
@@ -794,7 +754,9 @@
             }
         
         //end selection 
+
             renderer.setClearColor(0xffffff, 1);
+                
             renderer.render(scene, activeCamera);
 
         }
