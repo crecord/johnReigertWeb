@@ -72,7 +72,7 @@
             windowHalfX = window.innerWidth / 2,
             windowHalfY = window.innerHeight / 2,
             camera, cameraFollow,cameraFollowHelper, activeCamera, scene, renderer, material, raycaster, currentIntersected,
-            arrayOfAllLines, count, currentlyBeingPlayed, scaledCurrentlyBeingPlayed, stopSetInterval, spherePlayHead, currentAudio;
+            arrayOfAllLines, currentlyBeingPlayed, scaledCurrentlyBeingPlayed, stopSetInterval, spherePlayHead, currentAudio, center;
 
         //var allAudio = []; 
         var mouse = new THREE.Vector2();
@@ -110,7 +110,13 @@
             loader.options.convertUpAxis = true;
             loader.load( 'redHeadDuck.dae', function ( collada ) {
                 dae = collada.scene.children[0];
-                dae.scale.x = dae.scale.y = dae.scale.z =  1000;
+                dae.scale.x = dae.scale.y = dae.scale.z =  1143;
+                dae.position.x = 1.92; 
+                dae.position.y = .34; 
+                dae.position.z = .16; 
+                dae.rotation.x = 2.1; 
+                dae.rotation.y = .36; 
+                dae.rotation.z = -2.46; 
                 dae.updateMatrix();
                 scene.add(dae);
             } );
@@ -121,7 +127,6 @@
             spherePlayHead.visible = false; 
 
             currentlyBeingPlayed = undefined; 
-            count = 0; 
             var i, n_sub, container;
 
             container = document.createElement('div');
@@ -327,85 +332,11 @@
         
         } 
 
-        function cameraPos(){
-            // find the position to place the camera 
-            var scaledPositionVector = scaledCurrentlyBeingPlayed.geometry.vertices[count].clone();
-            scaledPositionVector.applyMatrix4(scaledCurrentlyBeingPlayed.matrixWorld );
-            return scaledPositionVector; 
-        }
-
-        function cameraLookAtPos(){
-            // find the position to look at
-            var lookAtPos = currentlyBeingPlayed.geometry.vertices[count].clone();
-            lookAtPos.applyMatrix4( currentlyBeingPlayed.matrixWorld );
-            return lookAtPos; 
-        }
-        
-        function moveColor(){
-        if (count< currentlyBeingPlayed.geometry.colors.length - 1){
-            currentlyBeingPlayed.geometry.colors[count].setRGB(0,238,207);
-            currentlyBeingPlayed.geometry.colorsNeedUpdate = true; 
-            
-            var camPos = cameraPos();
-
-            activeCamera.position.x = camPos.x  ;
-            activeCamera.position.y = camPos.y ;
-            activeCamera.position.z = camPos.z ;
-            
-            
-            
-            var camLookAt = cameraLookAtPos(); 
-            
-            activeCamera.lookAt(camLookAt);
-
-            spherePlayHead.position.y = camLookAt.y; 
-            spherePlayHead.position.z = camLookAt.z; 
-            spherePlayHead.position.x = camLookAt.x; 
-
-            activeCamera.updateProjectionMatrix();
-
-            cameraFollowHelper.update();
-            count++; 
-        }
-
-        else{
-            isCameraMove = true; 
-            currentAudio.pause();
-            removeEntity(scaledCurrentlyBeingPlayed);
-            //removeEntity(spherePlayHead);
-            
-            cameraFollowHelper.visible = false;
-            count = 0; 
-            currentlyBeingPlayed = undefined;
-            clearInterval(stopSetInterval); 
-            // this is the moment to animate the camera
-            
-            count++;
-            var tween = new TWEEN.Tween(activeCamera.position).to({
-                x:0,
-                y:0,
-                z:1000
-            },3000)
-            .onComplete(function(){
-                isLineFollowing = false; 
-            }
-            )
-            .easing(TWEEN.Easing.Cubic.InOut);
-            
-            tween.start();
-            
     
-            var tweenW = new TWEEN.Tween(activeCamera.rotation).to({
-                x: 0,
-                y: 0,
-                z: 0
-            },3000)
-            .easing(TWEEN.Easing.Cubic.InOut);
-            
-            
-            tweenW.start();
-            }
-        }
+
+        
+        
+
 
 
 
@@ -419,12 +350,10 @@
             
 
             cameraFollowHelper.visible = false;
-            count = 0; 
             currentlyBeingPlayed = undefined;
             //clearInterval(stopSetInterval); 
             // this is the moment to animate the camera
-            
-            count++;
+           
 
             //tweenCamPos.start(); 
             //tweenCamRot.start(); 
@@ -439,17 +368,8 @@
             xS = [];
             yS = [];
             zS = [];
-
-            currentlyBeingPlayed.geometry.computeBoundingBox();
-            // find the center of it again
-              var center = new THREE.Vector3();
-                    center.x = ((currentlyBeingPlayed.geometry.boundingBox.max.x -currentlyBeingPlayed.geometry.boundingBox.min.x)/2) + currentlyBeingPlayed.geometry.boundingBox.min.x; 
-                    center.y = ((currentlyBeingPlayed.geometry.boundingBox.max.y -currentlyBeingPlayed.geometry.boundingBox.min.y)/2) + currentlyBeingPlayed.geometry.boundingBox.min.y; 
-                    center.z = ((currentlyBeingPlayed.geometry.boundingBox.max.z -currentlyBeingPlayed.geometry.boundingBox.min.z)/2) + currentlyBeingPlayed.geometry.boundingBox.min.z; 
-                    center.applyMatrix4( currentlyBeingPlayed.matrixWorld );
-
-                   
-            for(var i=0; i < scaledCurrentlyBeingPlayed.geometry.vertices.length; i+=50 ){
+            
+            for(var i=0; i < currentlyBeingPlayed.geometry.vertices.length; i+=50 ){
                 //var thePoint = scaledCurrentlyBeingPlayed.geometry.vertices[i];
                 var thePoint = currentlyBeingPlayed.geometry.vertices[i].clone();
                 thePoint.applyMatrix4( currentlyBeingPlayed.matrixWorld );
@@ -469,19 +389,29 @@
                 xS.push(difference.x); 
                 yS.push(difference.y); 
                 zS.push(difference.z); 
-
             }
 
-            /*
-            for(var i=0; i < scaledCurrentlyBeingPlayed.geometry.vertices.length; i+=50 ){
-                //var thePoint = scaledCurrentlyBeingPlayed.geometry.vertices[i];
-                var thePoint = scaledCurrentlyBeingPlayed.geometry.vertices[i].clone();
-                thePoint.applyMatrix4( scaledCurrentlyBeingPlayed.matrixWorld );
-                xS.push(thePoint.x); 
-                yS.push(thePoint.y); 
-                zS.push(thePoint.z); 
-            }
-            */
+            // add the last point so there isn't an extra section at the end.
+            var lastPntIndex = currentlyBeingPlayed.geometry.vertices.length -1; 
+            var thePoint = currentlyBeingPlayed.geometry.vertices[lastPntIndex].clone();
+                thePoint.applyMatrix4( currentlyBeingPlayed.matrixWorld );
+                xA.push(thePoint.x); 
+                yA.push(thePoint.y); 
+                zA.push(thePoint.z); 
+                indexA.push(lastPntIndex);
+
+                var difference= new THREE.Vector3();
+
+                difference.subVectors(thePoint, center);
+
+                difference.multiplyScalar(1);
+
+                difference.add(thePoint); 
+    
+                xS.push(difference.x); 
+                yS.push(difference.y); 
+                zS.push(difference.z); 
+
 
 
             var dur = 10000;
@@ -494,7 +424,10 @@
                 spherePlayHead.position.y = this.y; 
                 spherePlayHead.position.z = this.z; 
                 spherePlayHead.position.x = this.x; 
-                activeCamera.lookAt(new THREE.Vector3( this.x, this.y ,this.z ));
+                var posLookAt = new THREE.Vector3( this.x, this.y ,this.z );
+                activeCamera.lookAt(posLookAt);
+                console.log("looking Here Path: "); 
+                console.log(posLookAt); 
                 var curIdx = Math.round(this.idx); 
                 if(curIdx != lastIndex){
                     if ((curIdx< currentlyBeingPlayed.geometry.colors.length - 1) & (lastIndex > -1) ){
@@ -507,13 +440,16 @@
                     lastIndex = curIdx; 
                 }
 
-
             }).onStart(function(){
                 
                 tweenCamPath.start();
             }
             ).interpolation( TWEEN.Interpolation.CatmullRom ).easing(TWEEN.Easing.Quadratic.InOut )
             .onComplete(function(){
+            	// zoom back to position. 
+                //activeCamera.updateProjectionMatrix(); 
+            	tweenCamPos.start();
+
             });
             
 
@@ -526,42 +462,71 @@
             }).interpolation( TWEEN.Interpolation.CatmullRom ).easing(TWEEN.Easing.Quadratic.InOut );
 
 
-            var tweenCamPos = new TWEEN.Tween(activeCamera.position).to({
+            //activeCamera.lookAt(new THREE.Vector3( this.x, this.y ,this.z ));
+            //find the final position 
+            //new THREE.Vector3( this.x, this.y ,this.z )
+				//xS.push(difference.x); 
+                //yS.push(difference.y); 
+                //zS.push(difference.z);
+
+
+
+            var camPosition = new THREE.Vector3( xS[xS.length-1], yS[yS.length-1] ,zS[zS.length-1]);
+            console.log(camPosition);
+            var tweenCamPos = new TWEEN.Tween(camPosition).to({
                 x:0,
                 y:0,
                 z:1000
-            },5000)
+            },3000)
             .onStart(function(){
-                
                 tweenCamRot.start();
-            }
-            )
+                console.log("position started");
+                console.log(camPosition); 
+            })
+            .onUpdate(function(){
+            	activeCamera.position.x = camPosition.x; 
+            	activeCamera.position.y = camPosition.y; 
+            	activeCamera.position.z = camPosition.z; 
+            	activeCamera.updateProjectionMatrix(); 
+            	console.log(camPosition); 
+            })
             .onComplete(function(){
                 isLineFollowing = false; 
+                console.log("position ended"); 
             }
             )
             .easing(TWEEN.Easing.Cubic.InOut);
             
-                        
-            var tweenCamRot = new TWEEN.Tween(activeCamera.rotation).to({
+            
+            var camLookAt = new THREE.Vector3( xA[xA.length-1], yA[yA.length-1] ,zA[zA.length-1]); 
+            console.log(camLookAt); 
+            var tweenCamRot = new TWEEN.Tween(camLookAt).to({
                 x: 0,
                 y: 0,
                 z: 0
-            },5000)
+            },3000)
             .easing(TWEEN.Easing.Cubic.InOut)
+            .onUpdate(function(){
+            	activeCamera.lookAt(new THREE.Vector3(camLookAt.x, camLookAt.y,camLookAt.z ));
+            	activeCamera.updateProjectionMatrix(); 
+            	console.log("looking Here retreat: "); 
+                console.log(camLookAt); 
+            })
             .onStart(function(){
+            	console.log("rotation Started");
                 isCameraMove = true; 
                 currentAudio.pause();
                 spherePlayHead.visible=false; 
                 //removeEntity(scaledCurrentlyBeingPlayed);
                 //removeEntity(spherePlayHead);
                 cameraFollowHelper.visible = false;
-                count = 0; 
-                currentlyBeingPlayed = undefined;
-                count++;              
+                currentlyBeingPlayed = undefined;       
+            }).onComplete(function(){
+                console.log("rotation ended");
+                
             });
 
-            tweenPath.chain(tweenCamPos); 
+            //tweenPath.chain(tweenCamPos); 
             //tweenPath.chain(tweenCamRot); 
             tweenPath.start(); 
             //tweenCamPath.start(); 
@@ -578,7 +543,6 @@
                 //currentlyBeingPlayed, stopSetInterval
                 
                 
-                var count = 0; 
                 if(currentlyBeingPlayed == undefined){
                     
                     isLineFollowing = true; 
@@ -591,29 +555,27 @@
                     
                     currentlyBeingPlayed = currentIntersected;
                     
-                    scaledCurrentlyBeingPlayed = currentlyBeingPlayed.clone();     
 
-                    scaledCurrentlyBeingPlayed.updateMatrixWorld();
-                   
-                    scaledCurrentlyBeingPlayed.scale.x = 10; 
-                    scaledCurrentlyBeingPlayed.scale.y = 10; 
-                    scaledCurrentlyBeingPlayed.scale.z = 10; 
-                    scaledCurrentlyBeingPlayed.rotation.x = -1.5;
-                    scaledCurrentlyBeingPlayed.rotation.z = -.5;
-                    
-                    scaledCurrentlyBeingPlayed.visible=true;
-                    scene.add(scaledCurrentlyBeingPlayed);
-                    
-                    count++; 
-                    count++; 
+                    currentlyBeingPlayed.geometry.computeBoundingBox();
+            // find the center of it again
+                    center = new THREE.Vector3();
+                    center.x = ((currentlyBeingPlayed.geometry.boundingBox.max.x -currentlyBeingPlayed.geometry.boundingBox.min.x)/2) + currentlyBeingPlayed.geometry.boundingBox.min.x; 
+                    center.y = ((currentlyBeingPlayed.geometry.boundingBox.max.y -currentlyBeingPlayed.geometry.boundingBox.min.y)/2) + currentlyBeingPlayed.geometry.boundingBox.min.y; 
+                    center.z = ((currentlyBeingPlayed.geometry.boundingBox.max.z -currentlyBeingPlayed.geometry.boundingBox.min.z)/2) + currentlyBeingPlayed.geometry.boundingBox.min.z; 
+                    center.applyMatrix4( currentlyBeingPlayed.matrixWorld );
 
-                    scaledCurrentlyBeingPlayed.updateMatrixWorld(); 
-                    activeCamera.updateProjectionMatrix();
-                    var camPosToTween = scaledCurrentlyBeingPlayed.geometry.vertices[count].clone();
-                    camPosToTween.applyMatrix4(scaledCurrentlyBeingPlayed.matrixWorld );
-            
+                
+            		// find the first position using the new method. 
+
+            		var thePoint = currentlyBeingPlayed.geometry.vertices[0].clone();
+            		thePoint.applyMatrix4( currentlyBeingPlayed.matrixWorld );
+            		var difference= new THREE.Vector3();
+                	difference.subVectors(thePoint, center);
+                	difference.multiplyScalar(1);
+                	difference.add(thePoint); 
+                	camPosToTween = difference;
                     
-                    var camTargetToTween = cameraLookAtPos();  
+                    var camTargetToTween = thePoint;  
 
 
                     var camTarget = new THREE.Vector3(0,0,0); 
@@ -622,7 +584,9 @@
                             x:camPosToTween.x,
                             y:camPosToTween.y,
                             z:camPosToTween.z
-                        },3000)
+                        },3000).onStart(function(){ 
+                			tweenTarget.start();  
+    					})		
                         .easing(TWEEN.Easing.Cubic.InOut)
                         .onComplete(function() {
                             //activeCamera.lookAt(camTarget);
@@ -649,12 +613,12 @@
                             x:camTargetToTween.x,
                             y:camTargetToTween.y,
                             z:camTargetToTween.z
-                        },2500)
+                        },3000)
                         .easing(TWEEN.Easing.Cubic.InOut).onUpdate(function(){
                             activeCamera.lookAt(camTarget); 
                         });
 
-                        tweenTarget.start();  
+                        
                         tweenf.start();
                         
                         
